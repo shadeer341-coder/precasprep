@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'InterviewAce - Ace Your University Interviews',
+  title: 'Precasprep - Ace Your University Interviews',
   description: 'AI-powered interview practice for university applicants.',
 };
 

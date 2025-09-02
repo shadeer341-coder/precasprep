@@ -26,7 +26,7 @@ export function About() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Our Features</div>
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Why Choose InterviewAce?</h2>
+            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Why Choose Precasprep?</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               We provide the tools you need to walk into your university interviews with confidence.
             </p>

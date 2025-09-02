@@ -30,7 +30,7 @@ export function Header() {
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo />
-            <span className="font-bold text-lg">interviewing.io</span>
+            <span className="font-bold text-lg">precasprep</span>
           </Link>
         </div>
         <nav className="hidden flex-1 items-center space-x-6 text-sm font-medium md:flex">

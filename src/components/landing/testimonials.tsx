@@ -13,7 +13,7 @@ import Image from "next/image";
 
 const testimonials = [
   {
-    quote: "InterviewAce was a game-changer. The AI feedback helped me pinpoint exactly where I was going wrong. I got into my dream university!",
+    quote: "Precasprep was a game-changer. The AI feedback helped me pinpoint exactly where I was going wrong. I got into my dream university!",
     name: "Sarah L.",
     title: "Student, Stanford University",
     avatar: "SL",
@@ -37,7 +37,7 @@ const testimonials = [
     ai_hint: "woman portrait"
   },
   {
-    quote: "Our agency uses InterviewAce to prepare our clients. The results speak for themselves - higher acceptance rates across the board.",
+    quote: "Our agency uses Precasprep to prepare our clients. The results speak for themselves - higher acceptance rates across the board.",
     name: "David R.",
     title: "Director, Apex Admissions",
     avatar: "DR",
@@ -55,7 +55,7 @@ export function Testimonials() {
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Testimonials</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">What Our Users Say</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Hear from students and educators who have found success with InterviewAce.
+              Hear from students and educators who have found success with Precasprep.
             </p>
           </div>
         </div>
