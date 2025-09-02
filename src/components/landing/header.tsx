@@ -8,7 +8,7 @@ const Logo = () => (
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="text-accent"
+    className="text-primary"
   >
     <path
       d="M21.284 1.442a3.003 3.003 0 0 0-2.079.718L3.34 17.51a2.986 2.986 0 0 0-.15 4.39 3.003 3.003 0 0 0 4.22.16l15.865-15.35a3 3 0 0 0-2.001-5.268Z"
@@ -26,7 +26,7 @@ const Logo = () => (
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo />
@@ -48,7 +48,7 @@ export function Header() {
           <Button variant="ghost" asChild>
             <Link href="#">Log in</Link>
           </Button>
-          <Button asChild variant="outline" className="font-bold">
+          <Button asChild className="font-bold">
             <Link href="/practice">Get started</Link>
           </Button>
         </div>

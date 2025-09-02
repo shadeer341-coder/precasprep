@@ -15,7 +15,7 @@ export function Hero() {
               Get anonymous technical mock interviews with engineers from Google, Facebook, and other top companies.
             </p>
             <div className="pt-4">
-              <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
+              <Button size="lg" asChild className="font-bold">
                 <Link href="/practice">Get cracking</Link>
               </Button>
             </div>
