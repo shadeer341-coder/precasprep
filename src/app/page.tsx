@@ -11,11 +11,13 @@ export default function Home() {
     <div className="flex min-h-[100dvh] flex-col bg-background">
       <Header />
       <main className="flex-1">
-        <Hero />
-        <About />
-        <Pricing />
-        <Testimonials />
-        <Contact />
+        <div className="w-full max-w-screen-xl mx-auto">
+          <Hero />
+          <About />
+          <Pricing />
+          <Testimonials />
+          <Contact />
+        </div>
       </main>
       <Footer />
     </div>
