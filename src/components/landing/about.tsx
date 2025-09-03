@@ -74,63 +74,98 @@ export function About() {
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-3 lg:gap-8">
-          {features.map((feature) => (
-            <Card key={feature.title} className={`flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl ${feature.className || ''}`}>
-              {feature.title === 'Seamless Integrations' ? (
-                 <div className="flex flex-col h-full">
-                    <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center gap-2">
-                      {integrations.map((integration) => (
-                          <div key={integration.name} className="flex items-center justify-between rounded-lg bg-black/20 p-3">
-                              <div className="flex items-center gap-3">
-                                  <Avatar className="h-10 w-10">
-                                      <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
-                                      <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
-                                  </Avatar>
-                                  <div>
-                                      <p className="font-semibold text-white">{integration.name}</p>
-                                      <p className="text-xs text-gray-400">{integration.email}</p>
-                                  </div>
-                              </div>
-                              <div className="p-2 rounded-full bg-black/30">
-                                  <Send className="h-4 w-4 text-white -rotate-45" />
-                              </div>
-                          </div>
-                      ))}
-                    </div>
-                    <CardHeader className="flex-row items-start gap-4">
-                      {feature.icon}
-                      <div className="flex-1">
-                        <CardTitle>{feature.title}</CardTitle>
-                        <p className="text-muted-foreground pt-2">{feature.description}</p>
-                      </div>
-                    </CardHeader>
-                 </div>
-              ) : feature.image ? (
-                <div className="aspect-video overflow-hidden">
-                  <Image 
-                    src={feature.image} 
-                    alt={feature.title} 
-                    width={600} 
-                    height={400} 
-                    data-ai-hint={feature.aiHint || ""}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              ) : null }
-             
-              {feature.title !== 'Seamless Integrations' && (
-                 <CardHeader className="flex-row items-start gap-4">
-                    {feature.icon}
-                    <div className="flex-1">
-                      <CardTitle>{feature.title}</CardTitle>
-                      <p className="text-muted-foreground pt-2">{feature.description}</p>
-                    </div>
-                  </CardHeader>
-              )}
+        <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-2 lg:gap-8">
+          <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl lg:col-span-1">
+            <div className="aspect-video overflow-hidden">
+              <Image 
+                src="https://picsum.photos/600/400?random=1" 
+                alt="Real Interview Questions" 
+                width={600} 
+                height={400} 
+                data-ai-hint="dashboard analytics"
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <CardHeader className="flex-row items-start gap-4">
+              <NotebookText className="h-8 w-8 text-primary" />
+              <div className="flex-1">
+                <CardTitle>Real Interview Questions</CardTitle>
+                <p className="text-muted-foreground pt-2">Practice with authentic university-style questions, carefully designed to reflect what you’ll face in real interviews.</p>
+              </div>
+            </CardHeader>
+          </Card>
 
+          <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl lg:col-span-1">
+            <div className="flex flex-col h-full">
+              <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center gap-2">
+                {integrations.map((integration) => (
+                    <div key={integration.name} className="flex items-center justify-between rounded-lg bg-black/20 p-3">
+                        <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                                <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
+                                <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-semibold text-white">{integration.name}</p>
+                                <p className="text-xs text-gray-400">{integration.email}</p>
+                            </div>
+                        </div>
+                        <div className="p-2 rounded-full bg-black/30">
+                            <Send className="h-4 w-4 text-white -rotate-45" />
+                        </div>
+                    </div>
+                ))}
+              </div>
+              <CardHeader className="flex-row items-start gap-4">
+                <Zap className="h-8 w-8 text-primary" />
+                <div className="flex-1">
+                  <CardTitle>Seamless Integrations</CardTitle>
+                  <p className="text-muted-foreground pt-2">Connect effortlessly with others.</p>
+                </div>
+              </CardHeader>
+            </div>
+          </Card>
+          
+          <div className="lg:col-span-1 grid gap-8">
+            <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+              <CardHeader className="flex-row items-center gap-4">
+                <div className="flex-1">
+                  <CardTitle>Smart Proctoring</CardTitle>
+                  <p className="text-muted-foreground pt-2">With webcam checks and internet monitoring, you’ll experience a realistic interview environment.</p>
+                </div>
+                <Bot className="h-8 w-8 text-primary" />
+              </CardHeader>
             </Card>
-          ))}
+            <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+              <CardHeader className="flex-row items-center gap-4">
+                 <div className="flex-1">
+                  <CardTitle>Track Your Growth</CardTitle>
+                  <p className="text-muted-foreground pt-2">Receive email reports after each attempt so you can see your progress and prepare with confidence.</p>
+                </div>
+                <Repeat className="h-8 w-8 text-primary" />
+              </CardHeader>
+            </Card>
+          </div>
+
+          <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl lg:col-span-1">
+            <div className="aspect-video overflow-hidden">
+              <Image 
+                src="https://picsum.photos/600/400?random=3"
+                alt="Real-Time Analytics" 
+                width={600} 
+                height={400} 
+                data-ai-hint="analytics chart"
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <CardHeader className="flex-row items-start gap-4">
+              <BarChart className="h-8 w-8 text-primary" />
+              <div className="flex-1">
+                <CardTitle>Real-Time Analytics</CardTitle>
+                <p className="text-muted-foreground pt-2">Drive decisions with powerful insights.</p>
+              </div>
+            </CardHeader>
+          </Card>
         </div>
       </div>
     </section>
