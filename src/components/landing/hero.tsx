@@ -26,7 +26,10 @@ export function Hero() {
   const yTransform = mousePosition.y * 0.02;
 
   return (
-    <section className="w-full py-20 md:py-32 lg:py-40 bg-black text-white">
+    <section
+      className="w-full py-20 md:py-32 lg:py-40 text-white"
+      style={{ background: 'linear-gradient(12deg, rgb(1 2 3) 60%, rgb(38 56 71) 100%)' }}
+    >
       <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
           <div className="flex flex-col justify-center space-y-6">
