@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Repeat, LayoutDashboard, Zap, BarChart, Paperclip, NotebookText, Bot } from "lucide-react";
+import { Users, Repeat, LayoutDashboard, Zap, BarChart, Paperclip, NotebookText, Bot, Send } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -117,7 +117,7 @@ export function About() {
                             </div>
                         </div>
                         <div className="p-2 rounded-full bg-black/30">
-                            <Paperclip className="h-4 w-4 text-white" />
+                            <Send className="h-4 w-4 text-white -rotate-45" />
                         </div>
                     </div>
                 ))}
