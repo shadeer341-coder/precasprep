@@ -1,8 +1,31 @@
+"use client";
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 
 export function Hero() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const { clientX, clientY } = event;
+      const x = clientX - window.innerWidth / 2;
+      const y = clientY - window.innerHeight / 2;
+      setMousePosition({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+  
+  const xTransform = mousePosition.x * 0.02;
+  const yTransform = mousePosition.y * 0.02;
+
   return (
     <section className="w-full py-20 md:py-32 lg:py-40">
       <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
@@ -24,14 +47,19 @@ export function Hero() {
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <Image
-              src="https://picsum.photos/600/400"
-              alt="Person in a mock interview session"
-              data-ai-hint="interview session"
-              width={600}
-              height={400}
-              className="rounded-lg object-cover"
-            />
+            <div
+              className="transition-transform duration-700 ease-out"
+              style={{ transform: `translateX(${xTransform}px) translateY(${yTransform}px) scale(1.05)` }}
+            >
+              <Image
+                src="https://picsum.photos/600/400"
+                alt="Person in a mock interview session"
+                data-ai-hint="interview session"
+                width={600}
+                height={400}
+                className="rounded-lg object-cover"
+              />
+            </div>
           </div>
         </div>
       </div>
