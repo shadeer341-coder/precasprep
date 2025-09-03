@@ -27,13 +27,13 @@ export function Hero() {
 
   return (
     <section
-      className="w-full py-20 md:py-32 lg:py-40 text-white"
+      className="w-full py-20 md:py-32 lg:py-40"
       style={{ background: 'linear-gradient(12deg, rgb(1 2 3) 60%, rgb(38 56 71) 100%)' }}
     >
       <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
           <div className="flex flex-col justify-center space-y-6">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-primary">
               Practice and ace interviews
             </h1>
             <p className="max-w-[600px] text-gray-400 md:text-xl">
@@ -43,7 +43,7 @@ export function Hero() {
               <Button size="lg" asChild className="font-bold">
                 <Link href="/practice">Get started for free</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="font-bold border-gray-400 text-white hover:bg-white hover:text-black">
+              <Button size="lg" variant="secondary" asChild className="font-bold">
                 <Link href="#">Book a session</Link>
               </Button>
             </div>
