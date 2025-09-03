@@ -8,7 +8,7 @@ const features = [
     icon: <NotebookText className="h-8 w-8 text-primary" />,
     title: "Real Interview Questions",
     description: "Practice with authentic university-style questions, carefully designed to reflect what you’ll face in real interviews.",
-    image: "https://picsum.photos/600/400?random=1",
+    image: "https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/saas_01.png",
     aiHint: "dashboard analytics",
     className: "lg:col-span-2",
   },
@@ -81,7 +81,7 @@ export function About() {
             <div className="relative bg-card rounded-lg h-full flex flex-col">
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
-                    src="https://picsum.photos/600/400?random=1" 
+                    src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/saas_01.png" 
                     alt="Real Interview Questions" 
                     width={600} 
                     height={400} 
