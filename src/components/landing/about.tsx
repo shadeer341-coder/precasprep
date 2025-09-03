@@ -78,21 +78,15 @@ const allIntegrations = [
 
 const IntegrationAnimation = () => {
     const [integrations, setIntegrations] = useState(allIntegrations.slice(0, 3));
-    const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setIsAnimating(true);
-            setTimeout(() => {
-                setIntegrations(prevIntegrations => {
-                    const newIntegrations = [...prevIntegrations.slice(1)];
-                    const lastId = newIntegrations[newIntegrations.length-1].id;
-                    const nextUserIndex = (allIntegrations.findIndex(user => user.id === lastId) + 1) % allIntegrations.length;
-                    newIntegrations.push(allIntegrations[nextUserIndex]);
-                    return newIntegrations;
-                });
-                setIsAnimating(false);
-            }, 500);
+            setIntegrations(prevIntegrations => {
+                const nextId = (prevIntegrations[prevIntegrations.length-1].id % allIntegrations.length) + 1;
+                const nextUser = allIntegrations.find(user => user.id === nextId) || allIntegrations[0];
+                const newIntegrations = [...prevIntegrations.slice(1), nextUser];
+                return newIntegrations;
+            });
         }, 2500);
 
         return () => clearInterval(interval);
@@ -100,15 +94,15 @@ const IntegrationAnimation = () => {
 
     return (
         <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start gap-2 h-[260px] relative">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
                 {integrations.map((integration, index) => (
                     <motion.div
                         key={integration.id}
                         layout
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: -100, transition: { duration: 0.3, ease: "easeOut" } }}
-                        transition={{ type: "spring", stiffness: 400, damping: 40 }}
+                        initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                        transition={{ type: "spring", stiffness: 350, damping: 35 }}
                         className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300 ${index === 0 ? 'shadow-lg shadow-primary/30' : ''}`}
                     >
                         <div className="flex items-center gap-3">
@@ -148,7 +142,7 @@ export function About() {
         <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-5 lg:gap-8">
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-3">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
@@ -172,7 +166,7 @@ export function About() {
 
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-2">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
               <IntegrationAnimation />
               <CardHeader className="flex-row items-start gap-4">
@@ -189,7 +183,7 @@ export function About() {
             <div className="lg:col-span-1 grid gap-8">
               <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                       <div className="flex-1">
@@ -202,7 +196,7 @@ export function About() {
               </Card>
               <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                        <div className="flex-1">
@@ -217,7 +211,7 @@ export function About() {
 
             <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-1">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
               <div className="relative bg-card rounded-lg h-full flex flex-col">
                   <div className="aspect-video overflow-hidden">
                     <Image 
@@ -244,3 +238,5 @@ export function About() {
     </section>
   );
 }
+
+    
