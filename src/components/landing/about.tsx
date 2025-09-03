@@ -68,7 +68,7 @@ export function About() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">Why Choose Us?</div>
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">The Ultimate Interview Prep Tool</h2>
+            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Built to Help You Ace Your University Interview</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Our platform offers a comprehensive suite of features designed to help you ace your university interviews.
             </p>
