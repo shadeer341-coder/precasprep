@@ -80,6 +80,13 @@ const allIntegrations = [
       avatar: "https://picsum.photos/100/100?random=7",
       aiHint: "man portrait",
     },
+    {
+      id: 5,
+      name: "Emily Clark",
+      email: "emily.clark@example.com",
+      avatar: "https://picsum.photos/100/100?random=8",
+      aiHint: "woman portrait",
+    },
 ]
 
 
@@ -230,5 +237,7 @@ export function About() {
     </section>
   );
 }
+
+    
 
     
