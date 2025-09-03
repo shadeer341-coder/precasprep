@@ -33,7 +33,7 @@ export function Hero() {
       <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
           <div className="flex flex-col justify-center space-y-6">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-primary">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-accent">
               Practice and ace interviews
             </h1>
             <p className="max-w-[600px] text-gray-400 md:text-xl">
