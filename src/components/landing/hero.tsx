@@ -27,18 +27,18 @@ export function Hero() {
 
   return (
     <section
-      className="w-full py-20 md:py-32 lg:py-40"
+      className="w-full py-20 md:py-32 lg:py-40 overflow-hidden"
     >
       <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
           <div className="flex flex-col justify-center space-y-6">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-accent">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-accent animate-fade-in-up">
               Practice and ace interviews
             </h1>
-            <p className="max-w-[600px] text-gray-400 md:text-xl">
+            <p className="max-w-[600px] text-gray-400 md:text-xl animate-fade-in-up" style={{animationDelay: '0.2s'}}>
               Get anonymous mock interviews with engineers from Google, Meta, and more.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
               <Button size="lg" asChild className="font-bold">
                 <Link href="/practice">Get started for free</Link>
               </Button>
@@ -49,8 +49,8 @@ export function Hero() {
           </div>
           <div className="flex items-center justify-center">
             <div
-              className="transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(${xTransform}px) translateY(${yTransform}px) scale(1.05)` }}
+              className="transition-transform duration-700 ease-out animate-fade-in"
+               style={{ transform: `translateX(${xTransform}px) translateY(${yTransform}px) scale(1.05)`, animationDelay: '0.6s' }}
             >
               <video
                 src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/hero-02.mp4"
