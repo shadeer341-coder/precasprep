@@ -75,16 +75,15 @@ export function About() {
           </div>
         </div>
         <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-5 lg:gap-8">
-          <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl lg:col-span-3">
+          <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl lg:col-span-3 shadow-[inset_0_2px_4px_0_hsl(var(--primary)/0.2)]">
             <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
-               <div className="absolute inset-0 rounded-md shadow-[inset_0_0_80px_30px_hsl(var(--primary))]"></div>
               <Image 
                 src="https://picsum.photos/600/400?random=1" 
                 alt="Real Interview Questions" 
                 width={600} 
                 height={400} 
                 data-ai-hint="dashboard analytics"
-                className="object-cover w-full h-full rounded-md opacity-80"
+                className="object-cover w-full h-full rounded-md"
               />
             </div>
             <CardHeader className="flex-row items-start gap-4">
