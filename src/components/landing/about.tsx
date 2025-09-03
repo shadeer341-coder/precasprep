@@ -142,7 +142,7 @@ export function About() {
         <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-5 lg:gap-8">
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-3">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-2xl opacity-0 transition duration-1000 group-hover:opacity-60 group-hover:blur-3xl"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
@@ -166,7 +166,7 @@ export function About() {
 
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-2">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-2xl opacity-0 transition duration-1000 group-hover:opacity-60 group-hover:blur-3xl"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
               <IntegrationAnimation />
               <CardHeader className="flex-row items-start gap-4">
@@ -183,7 +183,7 @@ export function About() {
             <div className="lg:col-span-1 grid gap-8">
               <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-2xl opacity-0 transition duration-1000 group-hover:opacity-60 group-hover:blur-3xl"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                       <div className="flex-1">
@@ -196,7 +196,7 @@ export function About() {
               </Card>
               <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-2xl opacity-0 transition duration-1000 group-hover:opacity-60 group-hover:blur-3xl"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                        <div className="flex-1">
@@ -211,7 +211,7 @@ export function About() {
 
             <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-1">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-2xl opacity-0 transition duration-1000 group-hover:opacity-60 group-hover:blur-3xl"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
               <div className="relative bg-card rounded-lg h-full flex flex-col">
                   <div className="aspect-video overflow-hidden">
                     <Image 
@@ -238,7 +238,3 @@ export function About() {
     </section>
   );
 }
-
-    
-
-    
