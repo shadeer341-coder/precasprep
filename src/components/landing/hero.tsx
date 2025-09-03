@@ -43,7 +43,7 @@ export function Hero() {
               <Button size="lg" asChild className="font-bold">
                 <Link href="/practice">Get started for free</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="font-bold border-gray-700 hover:bg-gray-800 hover:text-white">
+              <Button size="lg" variant="outline" asChild className="font-bold border-gray-400 text-white hover:bg-white hover:text-black">
                 <Link href="#">Book a session</Link>
               </Button>
             </div>
