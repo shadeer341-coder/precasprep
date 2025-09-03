@@ -14,8 +14,8 @@ const features = [
   },
   {
     icon: <Zap className="h-8 w-8 text-primary" />,
-    title: "Seamless Integrations",
-    description: "Connect effortlessly with others.",
+    title: "Agency Dashboard",
+    description: "Invite students, allocate attempts, and view results from one clean dashboard.",
     image: "https://picsum.photos/600/400?random=2",
     aiHint: "people avatars",
   },
@@ -125,8 +125,8 @@ export function About() {
               <CardHeader className="flex-row items-start gap-4">
                 <Zap className="h-8 w-8 text-primary" />
                 <div className="flex-1">
-                  <CardTitle>Seamless Integrations</CardTitle>
-                  <p className="text-muted-foreground pt-2">Connect effortlessly with others.</p>
+                  <CardTitle>Agency Dashboard</CardTitle>
+                  <p className="text-muted-foreground pt-2">Invite students, allocate attempts, and view results from one clean dashboard.</p>
                 </div>
               </CardHeader>
             </div>
