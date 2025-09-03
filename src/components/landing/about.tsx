@@ -1,7 +1,12 @@
+
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Repeat, LayoutDashboard, Zap, BarChart, Paperclip, NotebookText, Bot, Send } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const features = [
   {
@@ -40,26 +45,106 @@ const features = [
   },
 ];
 
-const integrations = [
+const allIntegrations = [
     {
+      id: 1,
       name: "Alex Hales",
       email: "alexhales@gmail.com",
       avatar: "https://picsum.photos/100/100?random=4",
       aiHint: "man portrait"
     },
     {
+      id: 2,
       name: "Mathew Faris",
       email: "mathewfaris@gmail.com",
       avatar: "https://picsum.photos/100/100?random=5",
       aiHint: "man portrait"
     },
     {
+      id: 3,
       name: "Georgia",
       email: "georgia@gmail.com",
       avatar: "https://picsum.photos/100/100?random=6",
       aiHint: "woman portrait"
     },
+    {
+      id: 4,
+      name: "David Lee",
+      email: "david.lee@example.com",
+      avatar: "https://picsum.photos/100/100?random=7",
+      aiHint: "man portrait",
+    },
 ]
+
+const IntegrationAnimation = () => {
+    const [integrations, setIntegrations] = useState(allIntegrations.slice(0, 3));
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveIndex(prevIndex => (prevIndex + 1));
+        }, 2500);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const nextIndex = (activeIndex + 3) % allIntegrations.length;
+        const newIntegrations = [...integrations.slice(1), allIntegrations[nextIndex]];
+
+        const timeout = setTimeout(() => {
+             setIntegrations(prev => {
+                const currentIds = new Set(prev.map(i => i.id));
+                const nextItem = allIntegrations.find(item => !currentIds.has(item.id));
+                const updatedList = [...prev.slice(1)];
+                if(nextItem) {
+                    updatedList.push(nextItem);
+                }
+                // Fallback to avoid empty list
+                if(updatedList.length === 0) {
+                     return allIntegrations.slice(0,3);
+                }
+                return updatedList;
+            });
+        }, 500)
+
+
+       return () => clearTimeout(timeout);
+    }, [activeIndex]);
+
+    return (
+        <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start gap-2 h-[260px] relative">
+            <AnimatePresence>
+                {integrations.map((integration, index) => (
+                    <motion.div
+                        key={integration.id}
+                        layout
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300 ${index === 0 ? 'shadow-lg shadow-primary/30' : ''}`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                                <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
+                                <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-semibold text-white">{integration.name}</p>
+                                <p className="text-xs text-gray-400">{integration.email}</p>
+                            </div>
+                        </div>
+                        <div className={`p-2 rounded-full bg-black/30 transition-all duration-500 ${index === 0 ? 'scale-110' : 'scale-100'}`}>
+                            <Send className="h-4 w-4 text-white -rotate-45" />
+                        </div>
+                    </motion.div>
+                ))}
+            </AnimatePresence>
+        </div>
+    );
+};
+
 
 export function About() {
   return (
@@ -77,7 +162,7 @@ export function About() {
         <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-5 lg:gap-8">
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-3">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
@@ -101,27 +186,9 @@ export function About() {
 
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-2">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
-              <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center gap-2">
-                {integrations.map((integration) => (
-                    <div key={integration.name} className="flex items-center justify-between rounded-lg bg-black/20 p-3">
-                        <div className="flex items-center gap-3">
-                            <Avatar className="h-10 w-10">
-                                <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
-                                <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <p className="font-semibold text-white">{integration.name}</p>
-                                <p className="text-xs text-gray-400">{integration.email}</p>
-                            </div>
-                        </div>
-                        <div className="p-2 rounded-full bg-black/30">
-                            <Send className="h-4 w-4 text-white -rotate-45" />
-                        </div>
-                    </div>
-                ))}
-              </div>
+              <IntegrationAnimation />
               <CardHeader className="flex-row items-start gap-4">
                 <Zap className="h-8 w-8 text-primary" />
                 <div className="flex-1">
@@ -136,7 +203,7 @@ export function About() {
             <div className="lg:col-span-1 grid gap-8">
               <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                       <div className="flex-1">
@@ -149,7 +216,7 @@ export function About() {
               </Card>
               <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                        <div className="flex-1">
@@ -164,7 +231,7 @@ export function About() {
 
             <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-1">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-3xl opacity-0 transition duration-1000 group-hover:opacity-70 group-hover:blur-3xl"></div>
               <div className="relative bg-card rounded-lg h-full flex flex-col">
                   <div className="aspect-video overflow-hidden">
                     <Image 
