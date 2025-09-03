@@ -78,26 +78,35 @@ export function About() {
           {features.map((feature) => (
             <Card key={feature.title} className={`flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl ${feature.className || ''}`}>
               {feature.title === 'Seamless Integrations' ? (
-                 <div className="aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center gap-2">
-                    {integrations.map((integration) => (
-                        <div key={integration.name} className="flex items-center justify-between rounded-lg bg-black/20 p-3">
-                            <div className="flex items-center gap-3">
-                                <Avatar className="h-10 w-10">
-                                    <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
-                                    <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold text-white">{integration.name}</p>
-                                    <p className="text-xs text-gray-400">{integration.email}</p>
-                                </div>
-                            </div>
-                            <div className="p-2 rounded-full bg-black/30">
-                                <Send className="h-4 w-4 text-white -rotate-45" />
-                            </div>
-                        </div>
-                    ))}
+                 <div className="flex flex-col h-full">
+                    <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center gap-2">
+                      {integrations.map((integration) => (
+                          <div key={integration.name} className="flex items-center justify-between rounded-lg bg-black/20 p-3">
+                              <div className="flex items-center gap-3">
+                                  <Avatar className="h-10 w-10">
+                                      <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
+                                      <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
+                                  </Avatar>
+                                  <div>
+                                      <p className="font-semibold text-white">{integration.name}</p>
+                                      <p className="text-xs text-gray-400">{integration.email}</p>
+                                  </div>
+                              </div>
+                              <div className="p-2 rounded-full bg-black/30">
+                                  <Send className="h-4 w-4 text-white -rotate-45" />
+                              </div>
+                          </div>
+                      ))}
+                    </div>
+                    <CardHeader className="flex-row items-start gap-4">
+                      {feature.icon}
+                      <div className="flex-1">
+                        <CardTitle>{feature.title}</CardTitle>
+                        <p className="text-muted-foreground pt-2">{feature.description}</p>
+                      </div>
+                    </CardHeader>
                  </div>
-              ) : feature.image && (
+              ) : feature.image ? (
                 <div className="aspect-video overflow-hidden">
                   <Image 
                     src={feature.image} 
@@ -108,14 +117,18 @@ export function About() {
                     className="object-cover w-full h-full"
                   />
                 </div>
+              ) : null }
+             
+              {feature.title !== 'Seamless Integrations' && (
+                 <CardHeader className="flex-row items-start gap-4">
+                    {feature.icon}
+                    <div className="flex-1">
+                      <CardTitle>{feature.title}</CardTitle>
+                      <p className="text-muted-foreground pt-2">{feature.description}</p>
+                    </div>
+                  </CardHeader>
               )}
-              <CardHeader className="flex-row items-start gap-4">
-                {feature.icon}
-                <div className="flex-1">
-                  <CardTitle>{feature.title}</CardTitle>
-                  <p className="text-muted-foreground pt-2">{feature.description}</p>
-                </div>
-              </CardHeader>
+
             </Card>
           ))}
         </div>
