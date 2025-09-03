@@ -1,21 +1,21 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Camera, BarChart } from "lucide-react";
+import { FileQuestion, ShieldCheck, TrendingUp } from "lucide-react";
 
 const features = [
   {
-    icon: <Bot className="h-10 w-10 text-primary" />,
-    title: "AI-Driven Prep",
-    description: "Receive intelligent feedback on your answers, tone, and body language from our advanced AI.",
+    icon: <FileQuestion className="h-10 w-10 text-primary" />,
+    title: "01. Real Interview Questions",
+    description: "Practice with authentic university-style questions, carefully designed to reflect what you’ll face in real interviews.",
   },
   {
-    icon: <Camera className="h-10 w-10 text-primary" />,
-    title: "Camera Validation",
-    description: "Practice with your camera on to get used to virtual interviews and receive feedback on your presence.",
+    icon: <ShieldCheck className="h-10 w-10 text-primary" />,
+    title: "02. Smart Proctoring",
+    description: "With webcam checks and internet monitoring, you’ll experience a realistic interview environment.",
   },
   {
-    icon: <BarChart className="h-10 w-10 text-primary" />,
-    title: "Structured Feedback",
-    description: "Get detailed reports on your strengths, weaknesses, and areas for improvement after each session.",
+    icon: <TrendingUp className="h-10 w-10 text-primary" />,
+    title: "03. Track Your Growth",
+    description: "Receive email reports after each attempt so you can see your progress and prepare with confidence.",
   },
 ];
 
@@ -26,7 +26,7 @@ export function About() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Our Features</div>
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Why Choose Precasprep?</h2>
+            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Why Choose Us?</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               We provide the tools you need to walk into your university interviews with confidence.
             </p>
