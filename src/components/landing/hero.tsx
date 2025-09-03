@@ -1,7 +1,6 @@
 "use client";
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 
@@ -51,13 +50,15 @@ export function Hero() {
               className="transition-transform duration-700 ease-out"
               style={{ transform: `translateX(${xTransform}px) translateY(${yTransform}px) scale(1.05)` }}
             >
-              <Image
-                src="https://picsum.photos/600/400"
-                alt="Person in a mock interview session"
-                data-ai-hint="interview session"
-                width={600}
-                height={400}
+              <video
+                src="https://videos.pexels.com/video-files/4782135/4782135-hd_1920_1080_30fps.mp4"
+                width="600"
+                height="400"
                 className="rounded-lg object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
             </div>
           </div>
