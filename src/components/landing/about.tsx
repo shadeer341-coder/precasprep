@@ -92,7 +92,7 @@ const allIntegrations = [
 
 export function About() {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
+    Autoplay({ delay: 2000, stopOnInteraction: false })
   );
 
   return (
@@ -144,6 +144,8 @@ export function About() {
                   }}
                   orientation="vertical"
                   className="w-full h-full"
+                  onMouseEnter={plugin.current.stop}
+                  onMouseLeave={plugin.current.reset}
                 >
                   <CarouselContent className="-mt-1 h-full">
                     {allIntegrations.map((integration) => (
