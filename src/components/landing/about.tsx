@@ -78,39 +78,25 @@ const allIntegrations = [
 
 const IntegrationAnimation = () => {
     const [integrations, setIntegrations] = useState(allIntegrations.slice(0, 3));
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setActiveIndex(prevIndex => (prevIndex + 1));
+            setIsAnimating(true);
+            setTimeout(() => {
+                setIntegrations(prevIntegrations => {
+                    const newIntegrations = [...prevIntegrations.slice(1)];
+                    const lastId = newIntegrations[newIntegrations.length-1].id;
+                    const nextUserIndex = (allIntegrations.findIndex(user => user.id === lastId) + 1) % allIntegrations.length;
+                    newIntegrations.push(allIntegrations[nextUserIndex]);
+                    return newIntegrations;
+                });
+                setIsAnimating(false);
+            }, 500);
         }, 2500);
 
         return () => clearInterval(interval);
     }, []);
-
-    useEffect(() => {
-        const nextIndex = (activeIndex + 3) % allIntegrations.length;
-        const newIntegrations = [...integrations.slice(1), allIntegrations[nextIndex]];
-
-        const timeout = setTimeout(() => {
-             setIntegrations(prev => {
-                const currentIds = new Set(prev.map(i => i.id));
-                const nextItem = allIntegrations.find(item => !currentIds.has(item.id));
-                const updatedList = [...prev.slice(1)];
-                if(nextItem) {
-                    updatedList.push(nextItem);
-                }
-                // Fallback to avoid empty list
-                if(updatedList.length === 0) {
-                     return allIntegrations.slice(0,3);
-                }
-                return updatedList;
-            });
-        }, 500)
-
-
-       return () => clearTimeout(timeout);
-    }, [activeIndex]);
 
     return (
         <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start gap-2 h-[260px] relative">
@@ -121,8 +107,8 @@ const IntegrationAnimation = () => {
                         layout
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        exit={{ opacity: 0, x: -100, transition: { duration: 0.3, ease: "easeOut" } }}
+                        transition={{ type: "spring", stiffness: 400, damping: 40 }}
                         className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300 ${index === 0 ? 'shadow-lg shadow-primary/30' : ''}`}
                     >
                         <div className="flex items-center gap-3">
