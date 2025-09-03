@@ -51,7 +51,7 @@ export function Hero() {
               style={{ transform: `translateX(${xTransform}px) translateY(${yTransform}px) scale(1.05)` }}
             >
               <video
-                src="https://videos.pexels.com/video-files/4782135/4782135-hd_1920_1080_30fps.mp4"
+                src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/hero-01.mp4"
                 width="600"
                 height="400"
                 className="rounded-lg object-cover"
