@@ -91,9 +91,6 @@ const allIntegrations = [
 
 
 export function About() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false })
-  );
 
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32">
@@ -138,18 +135,22 @@ export function About() {
             <div className="relative bg-card rounded-lg h-full flex flex-col">
               <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start h-[260px] relative">
                 <Carousel
-                  plugins={[plugin.current]}
+                  plugins={[
+                    Autoplay({
+                      delay: 2000,
+                      stopOnInteraction: false,
+                      stopOnMouseEnter: true,
+                    }),
+                  ]}
                   opts={{
                     loop: true,
                   }}
                   orientation="vertical"
                   className="w-full h-full"
-                  onMouseEnter={plugin.current.stop}
-                  onMouseLeave={plugin.current.reset}
                 >
                   <CarouselContent className="-mt-1 h-full">
                     {allIntegrations.map((integration) => (
-                      <CarouselItem key={integration.id} className="pt-1 basis-1/3">
+                      <CarouselItem key={integration.id} className="pt-1 basis-1/4">
                         <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
                           <div className="flex items-center gap-3">
                               <Avatar className="h-10 w-10">
