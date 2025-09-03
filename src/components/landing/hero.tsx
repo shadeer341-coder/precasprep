@@ -26,21 +26,21 @@ export function Hero() {
   const yTransform = mousePosition.y * 0.02;
 
   return (
-    <section className="w-full py-20 md:py-32 lg:py-40">
+    <section className="w-full py-20 md:py-32 lg:py-40 bg-black text-white">
       <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
           <div className="flex flex-col justify-center space-y-6">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
               Practice and ace interviews
             </h1>
-            <p className="max-w-[600px] text-muted-foreground md:text-xl">
+            <p className="max-w-[600px] text-gray-400 md:text-xl">
               Get anonymous mock interviews with engineers from Google, Meta, and more.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button size="lg" asChild className="font-bold">
                 <Link href="/practice">Get started for free</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="font-bold">
+              <Button size="lg" variant="outline" asChild className="font-bold border-gray-700 hover:bg-gray-800 hover:text-white">
                 <Link href="#">Book a session</Link>
               </Button>
             </div>
@@ -51,7 +51,7 @@ export function Hero() {
               style={{ transform: `translateX(${xTransform}px) translateY(${yTransform}px) scale(1.05)` }}
             >
               <video
-                src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/hero-01.mp4"
+                src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/hero-02.mp4"
                 width="600"
                 height="400"
                 className="rounded-lg object-cover"
