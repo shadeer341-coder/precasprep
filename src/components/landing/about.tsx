@@ -92,7 +92,7 @@ const allIntegrations = [
 
 export function About() {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
+    Autoplay({ delay: 2000, stopOnInteraction: true, stopOnMouseEnter: true })
   )
 
   return (
@@ -146,7 +146,7 @@ export function About() {
                   className="w-full h-full"
                 >
                   <CarouselContent className="-mt-1 h-full">
-                    {allIntegrations.map((integration, index) => (
+                    {allIntegrations.map((integration) => (
                       <CarouselItem key={integration.id} className="pt-1 basis-1/3">
                         <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
                           <div className="flex items-center gap-3">
@@ -237,7 +237,3 @@ export function About() {
     </section>
   );
 }
-
-    
-
-    
