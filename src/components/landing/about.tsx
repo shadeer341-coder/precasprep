@@ -92,8 +92,8 @@ const allIntegrations = [
 
 export function About() {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true, stopOnMouseEnter: true })
-  )
+    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
 
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32">
