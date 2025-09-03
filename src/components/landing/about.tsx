@@ -5,8 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Repeat, LayoutDashboard, Zap, BarChart, Paperclip, NotebookText, Bot, Send } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import React from 'react';
 
 const features = [
   {
@@ -76,57 +81,12 @@ const allIntegrations = [
     },
 ]
 
-const IntegrationAnimation = () => {
-    const [integrations, setIntegrations] = useState(allIntegrations.slice(0, 3));
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setIntegrations(prevIntegrations => {
-                const nextId = (prevIntegrations[prevIntegrations.length-1].id % allIntegrations.length) + 1;
-                const nextUser = allIntegrations.find(user => user.id === nextId) || allIntegrations[0];
-                const newIntegrations = [...prevIntegrations.slice(1), nextUser];
-                return newIntegrations;
-            });
-        }, 2500);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start gap-2 h-[260px] relative">
-            <AnimatePresence initial={false}>
-                {integrations.map((integration, index) => (
-                    <motion.div
-                        key={integration.id}
-                        layout
-                        initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -30, scale: 0.8, transition: { duration: 0.2 } }}
-                        transition={{ type: "spring", stiffness: 350, damping: 35, mass: 1 }}
-                        className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300 ${index === 0 ? 'shadow-lg shadow-primary/30' : ''}`}
-                    >
-                        <div className="flex items-center gap-3">
-                            <Avatar className="h-10 w-10">
-                                <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
-                                <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <p className="font-semibold text-white">{integration.name}</p>
-                                <p className="text-xs text-gray-400">{integration.email}</p>
-                            </div>
-                        </div>
-                        <div className={`p-2 rounded-full bg-black/30 transition-all duration-500 ${index === 0 ? 'scale-110' : 'scale-100'}`}>
-                            <Send className="h-4 w-4 text-white -rotate-45" />
-                        </div>
-                    </motion.div>
-                ))}
-            </AnimatePresence>
-        </div>
-    );
-};
-
 
 export function About() {
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
+  )
+
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32">
       <div className="container px-4 md:px-6">
@@ -168,7 +128,38 @@ export function About() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
-              <IntegrationAnimation />
+              <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start h-[260px] relative">
+                <Carousel
+                  plugins={[plugin.current]}
+                  opts={{
+                    loop: true,
+                  }}
+                  orientation="vertical"
+                  className="w-full h-full"
+                >
+                  <CarouselContent className="-mt-1 h-full">
+                    {allIntegrations.map((integration, index) => (
+                      <CarouselItem key={integration.id} className="pt-1 basis-1/3">
+                        <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
+                          <div className="flex items-center gap-3">
+                              <Avatar className="h-10 w-10">
+                                  <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
+                                  <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                  <p className="font-semibold text-white">{integration.name}</p>
+                                  <p className="text-xs text-gray-400">{integration.email}</p>
+                              </div>
+                          </div>
+                          <div className={`p-2 rounded-full bg-black/30 transition-all duration-500`}>
+                              <Send className="h-4 w-4 text-white -rotate-45" />
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
+              </div>
               <CardHeader className="flex-row items-start gap-4">
                 <Zap className="h-8 w-8 text-primary" />
                 <div className="flex-1">
