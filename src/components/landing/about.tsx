@@ -133,7 +133,7 @@ export function About() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
             <div className="relative bg-card rounded-lg h-full flex flex-col">
-              <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-start relative">
+              <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center relative">
                 <Carousel
                   plugins={[
                     Autoplay({
@@ -143,12 +143,13 @@ export function About() {
                     }),
                   ]}
                   opts={{
+                    align: "start",
                     loop: true,
                   }}
                   orientation="vertical"
-                  className="w-full h-[260px]"
+                  className="w-full"
                 >
-                  <CarouselContent className="-mt-1 h-full">
+                  <CarouselContent className="-mt-1 h-[260px]">
                     {allIntegrations.map((integration) => (
                       <CarouselItem key={integration.id} className="pt-1 basis-1/4">
                         <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
