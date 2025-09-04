@@ -17,7 +17,7 @@ const features = [
     icon: <NotebookText className="h-8 w-8 text-primary" />,
     title: "Real Interview Questions",
     description: "Practice with authentic university-style questions, carefully designed to reflect what you’ll face in real interviews.",
-    image: "https://imageio.forbes.com/specials-images/imageserve/663e3a5c927c44fd5629ad0f/product-visuals/0x0.png?format=png&crop=1586,891,x105,y0,safe&width=960",
+    image: "https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-time-analytics-01.jpg",
     aiHint: "dashboard analytics",
     className: "lg:col-span-2",
   },
@@ -44,7 +44,7 @@ const features = [
     icon: <BarChart className="h-8 w-8 text-primary" />,
     title: "Real-Time Analytics",
     description: "Drive decisions with powerful insights.",
-    image: "https://picsum.photos/600/400?random=3",
+    image: "https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/saas_01.png",
     aiHint: "analytics chart",
   },
 ];
@@ -89,6 +89,9 @@ const allIntegrations = [
 
 
 export function About() {
+  const autoplay = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: false })
+  );
 
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32">
@@ -109,7 +112,7 @@ export function About() {
             <div className="relative bg-card rounded-lg h-full flex flex-col">
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
-                    src="https://imageio.forbes.com/specials-images/imageserve/663e3a5c927c44fd5629ad0f/product-visuals/0x0.png?format=png&crop=1586,891,x105,y0,safe&width=960" 
+                    src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-time-analytics-01.jpg" 
                     alt="Real Interview Questions" 
                     width={600} 
                     height={400} 
@@ -133,12 +136,7 @@ export function About() {
             <div className="relative bg-card rounded-lg h-full flex flex-col">
               <div className="flex-grow aspect-video overflow-hidden bg-[#111119] p-4 flex flex-col justify-center relative">
                 <Carousel
-                  plugins={[
-                    Autoplay({
-                      delay: 2000,
-                      stopOnInteraction: false,
-                    }),
-                  ]}
+                  plugins={[autoplay.current]}
                   opts={{
                     align: "start",
                     loop: true,
@@ -146,9 +144,9 @@ export function About() {
                   orientation="vertical"
                   className="w-full"
                 >
-                  <CarouselContent className="-mt-1 h-[260px]">
+                  <CarouselContent className="h-[260px]">
                     {allIntegrations.map((integration) => (
-                      <CarouselItem key={integration.id} className="pt-1 basis-1/4">
+                      <CarouselItem key={integration.id} className="basis-1/4">
                         <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
                           <div className="flex items-center gap-3">
                               <Avatar className="h-10 w-10">
@@ -215,7 +213,7 @@ export function About() {
               <div className="relative bg-card rounded-lg h-full flex flex-col">
                   <div className="aspect-video overflow-hidden">
                     <Image 
-                      src="https://imageio.forbes.com/specials-images/imageserve/663e3a5c927c44fd5629ad0f/product-visuals/0x0.png?format=png&crop=1586,891,x105,y0,safe&width=960"
+                      src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/saas_01.png"
                       alt="Real-Time Analytics" 
                       width={600} 
                       height={400} 
