@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,7 +110,7 @@ export function About() {
             <div className="relative bg-card rounded-lg h-full flex flex-col">
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
-                    src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-time-analytics-01.jpg" 
+                    src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-questions.jpg" 
                     alt="Real Interview Questions" 
                     width={600} 
                     height={400} 
@@ -235,3 +236,5 @@ export function About() {
     </section>
   );
 }
+
+    
