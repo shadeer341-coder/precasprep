@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -138,8 +136,6 @@ export function About() {
                   plugins={[
                     Autoplay({
                       delay: 2000,
-                      stopOnInteraction: false,
-                      stopOnMouseEnter: false,
                     }),
                   ]}
                   opts={{
@@ -149,7 +145,7 @@ export function About() {
                   orientation="vertical"
                   className="w-full"
                 >
-                  <CarouselContent className="-mt-1 h-[260px]">
+                  <CarouselContent className="h-[260px]">
                     {allIntegrations.map((integration) => (
                       <CarouselItem key={integration.id} className="pt-1 basis-1/4">
                         <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
@@ -218,7 +214,7 @@ export function About() {
               <div className="relative bg-card rounded-lg h-full flex flex-col">
                   <div className="aspect-video overflow-hidden">
                     <Image 
-                      src="https://picsum.photos/600/400?random=3"
+                      src="https://imageio.forbes.com/specials-images/imageserve/663e3a5c927c44fd5629ad0f/product-visuals/0x0.png?format=png&crop=1586,891,x105,y0,safe&width=960"
                       alt="Real-Time Analytics" 
                       width={600} 
                       height={400} 
@@ -241,3 +237,5 @@ export function About() {
     </section>
   );
 }
+
+    
