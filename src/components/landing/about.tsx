@@ -143,20 +143,22 @@ export function About() {
                 >
                   <CarouselContent className="h-[260px]">
                     {allIntegrations.map((integration) => (
-                      <CarouselItem key={integration.id} className="basis-1/4 pt-0">
-                        <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
-                          <div className="flex items-center gap-3">
-                              <Avatar className="h-10 w-10">
-                                  <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
-                                  <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <div>
-                                  <p className="font-semibold text-white">{integration.name}</p>
-                                  <p className="text-xs text-gray-400">{integration.email}</p>
-                              </div>
-                          </div>
-                          <div className={`p-2 rounded-full bg-black/30 transition-all duration-500`}>
-                              <Send className="h-4 w-4 text-white -rotate-45" />
+                      <CarouselItem key={integration.id} className="basis-1/4">
+                        <div className="p-1">
+                          <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
+                            <div className="flex items-center gap-3">
+                                <Avatar className="h-10 w-10">
+                                    <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
+                                    <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p className="font-semibold text-white">{integration.name}</p>
+                                    <p className="text-xs text-gray-400">{integration.email}</p>
+                                </div>
+                            </div>
+                            <div className={`p-2 rounded-full bg-black/30 transition-all duration-500`}>
+                                <Send className="h-4 w-4 text-white -rotate-45" />
+                            </div>
                           </div>
                         </div>
                       </CarouselItem>
@@ -210,7 +212,7 @@ export function About() {
               <div className="relative bg-card rounded-lg h-full flex flex-col">
                   <div className="aspect-video overflow-hidden">
                     <Image 
-                      src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/saas_01.png"
+                      src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-time-analytics-01.jpg"
                       alt="Real-Time Analytics" 
                       width={600} 
                       height={400} 
