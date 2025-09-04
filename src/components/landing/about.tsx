@@ -139,7 +139,7 @@ export function About() {
                     Autoplay({
                       delay: 2000,
                       stopOnInteraction: false,
-                      stopOnMouseEnter: true,
+                      stopOnMouseEnter: false,
                     }),
                   ]}
                   opts={{
