@@ -108,7 +108,7 @@ export function Hero() {
               animate="visible"
             >
               <video
-                src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/hero-02.mp4"
+                src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/shadeer-hero.mp4"
                 width="600"
                 height="400"
                 className="rounded-lg object-cover"
