@@ -6,6 +6,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 export const metadata: Metadata = {
   title: 'Precasprep - Ace Your University Interviews',
   description: 'AI-powered interview practice for university applicants.',
+  icons: {
+    icon: 'https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/favicon.png',
+  },
 };
 
 export default function RootLayout({
