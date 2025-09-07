@@ -117,6 +117,7 @@ export function Hero() {
                 loop
                 muted
                 playsInline
+                title="Promotional video for Precasprep showing app interface"
               />
             </motion.div>
           </div>

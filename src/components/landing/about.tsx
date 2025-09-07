@@ -148,7 +148,7 @@ export function About() {
                 <div className="aspect-video overflow-hidden rounded-lg m-2 relative">
                   <Image 
                     src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-questions.jpg" 
-                    alt="Real Interview Questions" 
+                    alt="A computer screen showing a list of interview questions for practice" 
                     width={600} 
                     height={400} 
                     data-ai-hint="dashboard analytics"
@@ -186,7 +186,7 @@ export function About() {
                           <div className={`flex items-center justify-between rounded-lg bg-black/20 p-3 transition-all duration-300`}>
                             <div className="flex items-center gap-3">
                                 <Avatar className="h-10 w-10">
-                                    <Image src={integration.avatar} alt={integration.name} width={100} height={100} data-ai-hint={integration.aiHint} />
+                                    <Image src={integration.avatar} alt={`${integration.name} - Agency Dashboard User`} width={100} height={100} data-ai-hint={integration.aiHint} />
                                     <AvatarFallback>{integration.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
                                 <div>
@@ -251,7 +251,7 @@ export function About() {
                   <div className="aspect-video overflow-hidden">
                     <Image 
                       src="https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-time-analytics-01.jpg"
-                      alt="Real-Time Analytics" 
+                      alt="Dashboard showing real-time analytics and charts" 
                       width={600} 
                       height={400} 
                       data-ai-hint="analytics chart"
@@ -273,9 +273,3 @@ export function About() {
     </motion.section>
   );
 }
-
-    
-
-    
-
-    
