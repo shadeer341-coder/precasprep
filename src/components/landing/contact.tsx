@@ -78,7 +78,7 @@ export function Contact() {
       className="w-full py-12 md:py-24 lg:py-32"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.25 }}
       variants={containerVariants}
     >
       <div className="container px-4 md:px-6">
@@ -187,5 +187,7 @@ export function Contact() {
     </motion.section>
   );
 }
+
+    
 
     
