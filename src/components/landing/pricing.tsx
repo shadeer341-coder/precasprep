@@ -1,7 +1,11 @@
+
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Mail } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion } from 'framer-motion';
 
 const individualFeatures = [
   "Unlimited practice sessions",
@@ -28,11 +32,44 @@ const agencyAdvancedFeatures = [
   "Priority support",
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
+
 export function Pricing() {
   return (
-    <section id="pricing" className="w-full py-12 md:py-24 lg:py-32">
+    <motion.section 
+      id="pricing" 
+      className="w-full py-12 md:py-24 lg:py-32"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
+    >
       <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <motion.div 
+          className="flex flex-col items-center justify-center space-y-4 text-center"
+          variants={itemVariants}
+        >
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Pricing Plans</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Find the Perfect Plan</h2>
@@ -40,8 +77,11 @@ export function Pricing() {
               Start with our flexible plans. Simple and transparent pricing to help you succeed.
             </p>
           </div>
-        </div>
-        <div className="mx-auto grid max-w-6xl items-start gap-8 sm:grid-cols-1 lg:grid-cols-3 pt-12">
+        </motion.div>
+        <motion.div 
+          className="mx-auto grid max-w-6xl items-start gap-8 sm:grid-cols-1 lg:grid-cols-3 pt-12"
+          variants={itemVariants}
+        >
           <Card className="flex flex-col h-full">
             <CardHeader>
               <CardTitle>Individual</CardTitle>
@@ -162,8 +202,10 @@ export function Pricing() {
               <Button className="w-full" variant="outline">Email Us</Button>
             </CardFooter>
           </Card>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
+
+    

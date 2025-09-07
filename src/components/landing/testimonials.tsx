@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { Star } from "lucide-react";
+import { motion } from 'framer-motion';
+
 
 const testimonials = [
   {
@@ -86,15 +88,48 @@ const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] 
   </Card>
 );
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
+
 
 export function Testimonials() {
   const firstRow = testimonials.slice(0, testimonials.length / 2);
   const secondRow = testimonials.slice(testimonials.length / 2);
 
   return (
-    <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32">
+    <motion.section 
+      id="testimonials" 
+      className="w-full py-12 md:py-24 lg:py-32"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
+    >
       <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <motion.div 
+          className="flex flex-col items-center justify-center space-y-4 text-center"
+          variants={itemVariants}
+        >
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Reviews</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">What Our Users Say</h2>
@@ -102,8 +137,11 @@ export function Testimonials() {
               Hear from students and educators who have found success with Precasprep.
             </p>
           </div>
-        </div>
-        <div className="relative mt-12 overflow-hidden">
+        </motion.div>
+        <motion.div 
+          className="relative mt-12 overflow-hidden"
+          variants={itemVariants}
+        >
           <div className="flex animate-scroll-left [animation-duration:40s] hover:[animation-play-state:paused]">
             {[...firstRow, ...firstRow].map((testimonial, index) => (
               <TestimonialCard key={`${testimonial.name}-${index}`} testimonial={testimonial} />
@@ -116,8 +154,10 @@ export function Testimonials() {
           </div>
           <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background to-transparent"></div>
           <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background to-transparent"></div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
+
+    

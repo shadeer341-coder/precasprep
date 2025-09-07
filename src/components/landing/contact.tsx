@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ArrowRight } from "lucide-react";
+import { motion } from 'framer-motion';
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,30 @@ const formSchema = z.object({
   interest: z.string({ required_error: "Please select an option." }),
   email: z.string().email("Please enter a valid email address."),
 });
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
+
 
 export function Contact() {
   const { toast } = useToast();
@@ -48,9 +73,19 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="w-full py-12 md:py-24 lg:py-32">
+    <motion.section 
+      id="contact" 
+      className="w-full py-12 md:py-24 lg:py-32"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
+    >
       <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+        <motion.div 
+          className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+          variants={itemVariants}
+        >
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Contact Us</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Get In Touch</h2>
@@ -58,8 +93,11 @@ export function Contact() {
               Have questions? We'd love to hear from you.
             </p>
           </div>
-        </div>
-        <div className="mx-auto max-w-2xl text-center">
+        </motion.div>
+        <motion.div 
+          className="mx-auto max-w-2xl text-center"
+          variants={itemVariants}
+        >
           <div className="mt-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 text-left">
@@ -126,7 +164,7 @@ export function Contact() {
               </form>
             </Form>
           </div>
-        </div>
+        </motion.div>
       </div>
       <style jsx>{`
         .inline-input {
@@ -146,6 +184,8 @@ export function Contact() {
           border-bottom: 1px solid hsl(var(--primary));
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 }
+
+    

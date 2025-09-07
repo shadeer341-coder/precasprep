@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const features = [
   {
@@ -88,13 +89,46 @@ const allIntegrations = [
     },
 ]
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
+
 
 export function About() {
 
   return (
-    <section id="about" className="w-full py-12 md:py-24 lg:py-32">
+    <motion.section 
+      id="about" 
+      className="w-full py-12 md:py-24 lg:py-32"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
+    >
       <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <motion.div 
+          className="flex flex-col items-center justify-center space-y-4 text-center"
+          variants={itemVariants}
+        >
           <div className="space-y-2 text-center">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">Why Choose Us?</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Built to Help You Ace Your University Interview</h2>
@@ -102,8 +136,11 @@ export function About() {
               Practice with real questions, get instant AI feedback, and track progress, all in one place.
             </p>
           </div>
-        </div>
-        <div className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-5 lg:gap-8">
+        </motion.div>
+        <motion.div 
+          className="mx-auto grid max-w-5xl gap-6 pt-12 lg:grid-cols-5 lg:gap-8"
+          variants={itemVariants}
+        >
           <Card className="relative group flex flex-col overflow-hidden transition-all duration-300 hover:scale-[1.02] lg:col-span-3">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute -inset-4 bg-gradient-to-r from-primary to-accent rounded-lg blur-xl opacity-0 transition duration-500 group-hover:opacity-100 group-hover:blur-3xl"></div>
@@ -231,10 +268,12 @@ export function About() {
               </div>
             </Card>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
+
+    
 
     
