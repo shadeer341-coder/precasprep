@@ -7,7 +7,6 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   interest: z.string(),
   email: z.string().email("Please enter a valid email address."),
-  terms: z.boolean(),
 });
 
 
