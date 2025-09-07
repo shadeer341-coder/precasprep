@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Check, Mail } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
+import { useState } from "react";
+import { PricingDialog } from "./pricing-dialog";
 
 const individualFeatures = [
   "Unlimited practice sessions",
@@ -56,7 +58,17 @@ const itemVariants = {
 };
 
 export function Pricing() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
+
+  const handlePlanSelect = (planName: string) => {
+    setSelectedPlan(planName);
+    setDialogOpen(true);
+  };
+
+
   return (
+    <>
     <motion.section 
       id="pricing" 
       className="w-full py-12 md:py-24 lg:py-32"
@@ -102,7 +114,7 @@ export function Pricing() {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Get Started</Button>
+              <Button className="w-full" onClick={() => handlePlanSelect("Individual")}>Get Started</Button>
             </CardFooter>
           </Card>
           
@@ -139,7 +151,7 @@ export function Pricing() {
                               ))}
                           </ul>
                       </div>
-                      <Button className="w-full mt-4">Choose Starter</Button>
+                      <Button className="w-full mt-4" onClick={() => handlePlanSelect("Agency - Starter")}>Choose Starter</Button>
                     </div>
                   </TabsContent>
                   <TabsContent value="standard" className="h-full">
@@ -159,7 +171,7 @@ export function Pricing() {
                               ))}
                           </ul>
                       </div>
-                      <Button className="w-full mt-4">Choose Standard</Button>
+                      <Button className="w-full mt-4" onClick={() => handlePlanSelect("Agency - Standard")}>Choose Standard</Button>
                     </div>
                   </TabsContent>
                   <TabsContent value="advanced" className="h-full">
@@ -179,7 +191,7 @@ export function Pricing() {
                                 ))}
                             </ul>
                         </div>
-                        <Button className="w-full mt-4">Choose Advanced</Button>
+                        <Button className="w-full mt-4" onClick={() => handlePlanSelect("Agency - Advanced")}>Choose Advanced</Button>
                      </div>
                   </TabsContent>
                 </div>
@@ -199,13 +211,17 @@ export function Pricing() {
                 </p>
             </CardContent>
             <CardFooter>
-              <Button className="w-full" variant="outline">Email Us</Button>
+              <Button className="w-full" variant="outline" onClick={() => handlePlanSelect("Enterprise")}>Email Us</Button>
             </CardFooter>
           </Card>
         </motion.div>
       </div>
     </motion.section>
+    <PricingDialog 
+      open={dialogOpen}
+      onOpenChange={setDialogOpen}
+      planName={selectedPlan}
+    />
+    </>
   );
 }
-
-    
