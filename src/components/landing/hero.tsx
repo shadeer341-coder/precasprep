@@ -76,7 +76,7 @@ export function Hero() {
             animate="visible"
           >
             <motion.h1 
-              className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-accent"
+              className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-white"
               variants={itemVariants}
             >
               Practice and ace interviews
