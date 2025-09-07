@@ -1,3 +1,4 @@
+
 'use server';
 
 import {z} from 'zod';
@@ -14,10 +15,11 @@ export type FormState = {
   errors?: {
     name?: string[];
     email?: string[];
+    plan?: string[];
   };
 };
 
-export async function submitPricingForm(prevState: FormState, formData: FormData) {
+export async function submitPricingForm(prevState: FormState, formData: FormData): Promise<FormState> {
   const validatedFields = FormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
