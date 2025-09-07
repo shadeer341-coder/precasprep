@@ -81,7 +81,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <SheetHeader className="text-left">
+              <SheetHeader className="sr-only">
                 <SheetTitle>Navigation</SheetTitle>
                 <SheetDescription>
                   Navigate to other sections of the website.
