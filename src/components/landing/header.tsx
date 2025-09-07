@@ -52,7 +52,7 @@ export function Header() {
             <Link href="/login">Log in</Link>
           </Button>
           <Button asChild className="font-bold">
-            <Link href="/practice">Get started for free</Link>
+            <Link href="/login">Get started for free</Link>
           </Button>
         </div>
       </div>
