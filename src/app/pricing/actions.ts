@@ -3,6 +3,8 @@
 
 import {z} from 'zod';
 import {redirect} from 'next/navigation';
+import { Resend } from 'resend';
+import { WelcomeEmail } from '@/emails/welcome';
 
 const FormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -19,6 +21,8 @@ export type FormState = {
   };
 };
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export async function submitPricingForm(prevState: FormState, formData: FormData): Promise<FormState> {
   const validatedFields = FormSchema.safeParse({
     name: formData.get('name'),
@@ -33,13 +37,22 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     };
   }
 
-  const {name, email} = validatedFields.data;
+  const {name, email, plan} = validatedFields.data;
+  const tempPassword = Math.random().toString(36).slice(-8);
 
-  // In a real app, you would:
-  // 1. Create a new user in your database.
-  // 2. Generate a temporary password.
-  // 3. Send an email with the login details.
-  console.log('Simulating user creation and email for:', validatedFields.data);
+  try {
+     await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: `Welcome to precasprep - Your ${plan} Plan`,
+      react: WelcomeEmail({ name, email, plan, tempPassword }),
+    });
+  } catch (error) {
+    console.error('Email sending error:', error);
+    return {
+      message: 'There was an issue sending your confirmation email. Please try again.',
+    }
+  }
 
   redirect(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
 }
