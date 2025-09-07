@@ -34,22 +34,22 @@ export function Header() {
           </Link>
         </div>
         <nav className="hidden flex-1 items-center space-x-6 text-sm font-medium md:flex">
-          <Link href="#about" className="text-foreground/80 transition-colors hover:text-foreground">
+          <Link href="/#about" className="text-foreground/80 transition-colors hover:text-foreground">
             Why Choose Us?
           </Link>
-          <Link href="#pricing" className="text-foreground/80 transition-colors hover:text-foreground">
+          <Link href="/#pricing" className="text-foreground/80 transition-colors hover:text-foreground">
             Pricing
           </Link>
-          <Link href="#testimonials" className="text-foreground/80 transition-colors hover:text-foreground">
+          <Link href="/#testimonials" className="text-foreground/80 transition-colors hover:text-foreground">
             Reviews
           </Link>
-          <Link href="#contact" className="text-foreground/80 transition-colors hover:text-foreground">
+          <Link href="/#contact" className="text-foreground/80 transition-colors hover:text-foreground">
             Contact Us
           </Link>
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="#">Log in</Link>
+            <Link href="/login">Log in</Link>
           </Button>
           <Button asChild className="font-bold">
             <Link href="/practice">Get started for free</Link>
