@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -76,13 +77,13 @@ export function Hero() {
             animate="visible"
           >
             <motion.h1 
-              className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-white"
+              className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-foreground"
               variants={itemVariants}
             >
               Practice and ace interviews
             </motion.h1>
             <motion.p 
-              className="max-w-[600px] text-gray-400 md:text-xl"
+              className="max-w-[600px] text-muted-foreground md:text-xl"
               variants={itemVariants}
             >
               Get anonymous mock interviews with engineers from Google, Meta, and more.
