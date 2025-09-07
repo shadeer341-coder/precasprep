@@ -100,7 +100,6 @@ export function Pricing() {
               <CardDescription>For students and individual applicants preparing for their big day.</CardDescription>
               <div className="flex items-baseline pt-4">
                 <span className="text-4xl font-bold">$25</span>
-                <span className="ml-1 text-muted-foreground">/month</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4 flex-1">
@@ -139,7 +138,6 @@ export function Pricing() {
                       <div className="flex-1">
                           <div className="flex items-baseline pt-4 justify-center">
                               <span className="text-4xl font-bold">$240</span>
-                              <span className="ml-1 text-muted-foreground">/month</span>
                           </div>
                           <p className="text-center text-sm text-muted-foreground mb-4">for 10 students</p>
                           <ul className="space-y-2">
@@ -159,7 +157,6 @@ export function Pricing() {
                       <div className="flex-1">
                           <div className="flex items-baseline pt-4 justify-center">
                               <span className="text-4xl font-bold">$575</span>
-                              <span className="ml-1 text-muted-foreground">/month</span>
                           </div>
                           <p className="text-center text-sm text-muted-foreground mb-4">for 25 students</p>
                           <ul className="space-y-2">
@@ -179,7 +176,6 @@ export function Pricing() {
                         <div className="flex-1">
                             <div className="flex items-baseline pt-4 justify-center">
                                 <span className="text-4xl font-bold">$1100</span>
-                                <span className="ml-1 text-muted-foreground">/month</span>
                             </div>
                             <p className="text-center text-sm text-muted-foreground mb-4">for 50 students</p>
                             <ul className="space-y-2">
