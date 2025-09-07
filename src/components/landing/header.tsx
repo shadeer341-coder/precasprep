@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '../theme-toggle';
@@ -54,7 +55,7 @@ export function Header() {
             <Link href="/login">Log in</Link>
           </Button>
           <Button asChild className="font-bold">
-            <Link href="/login">Get started for free</Link>
+            <Link href="/login">Sign up</Link>
           </Button>
         </div>
       </div>
