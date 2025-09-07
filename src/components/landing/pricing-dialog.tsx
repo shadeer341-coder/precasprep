@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,7 @@ interface PricingDialogProps {
 
 export function PricingDialog({ open, onOpenChange, planName }: PricingDialogProps) {
   const initialState = { message: '', errors: {} };
-  const [state, dispatch] = useFormState(submitPricingForm, initialState);
+  const [state, dispatch] = useActionState(submitPricingForm, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
