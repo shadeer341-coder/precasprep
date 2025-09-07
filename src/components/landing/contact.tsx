@@ -50,9 +50,16 @@ export function Contact() {
   return (
     <section id="contact" className="w-full py-12 md:py-24 lg:py-32">
       <div className="container px-4 md:px-6">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+          <div className="space-y-2">
+            <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Contact Us</div>
+            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Get In Touch</h2>
+            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              Have questions? We'd love to hear from you.
+            </p>
+          </div>
+        </div>
         <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm text-primary font-semibold">/ Get In Touch</p>
-            <h2 className="text-4xl font-headline font-bold">Schedule an Appointment</h2>
           <div className="mt-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 text-left">
