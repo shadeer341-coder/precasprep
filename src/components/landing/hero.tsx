@@ -93,7 +93,7 @@ export function Hero() {
               variants={itemVariants}
             >
               <Button size="lg" asChild className="font-bold">
-                <Link href="/login">Get started for free</Link>
+                <Link href="/login">Sign up</Link>
               </Button>
               <Button size="lg" variant="secondary" asChild className="font-bold">
                 <Link href="#">Book a session</Link>
