@@ -5,12 +5,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Precasprep - AI-Powered University Interview Practice',
-  description: 'Ace your university admissions with Precasprep. Get AI-powered mock interviews, instant feedback, and real-time analytics to boost your confidence and performance.',
-  keywords: ['AI interview practice', 'university admissions', 'mock interviews', 'college prep', 'interview feedback'],
+  title: 'Precasprep - Expert University Interview Practice',
+  description: 'Ace your university admissions with Precasprep. Get mock interviews, personalized feedback from experts, and real-time analytics to boost your confidence and performance.',
+  keywords: ['interview practice', 'university admissions', 'mock interviews', 'college prep', 'expert feedback'],
   openGraph: {
-    title: 'Precasprep - AI-Powered University Interview Practice',
-    description: 'Ace your university admissions with Precasprep. Get AI-powered mock interviews, instant feedback, and real-time analytics to boost your confidence and performance.',
+    title: 'Precasprep - Expert University Interview Practice',
+    description: 'Ace your university admissions with Precasprep. Get mock interviews, personalized feedback from experts, and real-time analytics to boost your confidence and performance.',
     url: 'https://precasprep.com', // Replace with your actual domain
     siteName: 'Precasprep',
     images: [
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Precasprep - AI-Powered University Interview Practice',
-    description: 'Ace your university admissions with Precasprep. Get AI-powered mock interviews, instant feedback, and real-time analytics to boost your confidence and performance.',
+    title: 'Precasprep - Expert University Interview Practice',
+    description: 'Ace your university admissions with Precasprep. Get mock interviews, personalized feedback from experts, and real-time analytics to boost your confidence and performance.',
     images: ['https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/og-image.png'], // Replace with your Twitter image URL
   },
   icons: {

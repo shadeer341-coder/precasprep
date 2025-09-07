@@ -11,7 +11,7 @@ import { PricingDialog } from "./pricing-dialog";
 
 const individualFeatures = [
   "Unlimited practice sessions",
-  "AI-powered feedback",
+  "Personalized expert feedback",
   "50+ interview questions",
   "Performance tracking",
 ];
@@ -221,5 +221,3 @@ export function Pricing() {
     </>
   );
 }
-
-    

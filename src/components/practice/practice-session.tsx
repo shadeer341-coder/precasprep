@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 import { useFormState } from "react-dom";
-import { Mic, Square, Loader2, Star, ThumbsDown, Video, VideoOff } from "lucide-react";
+import { Mic, Square, Loader2, Star, ThumbsDown, Video, VideoOff, Send, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -34,7 +35,7 @@ export function PracticeSession() {
   const [state, formAction] = useFormState(getInterviewFeedback, {});
 
   useEffect(() => {
-    if (state.analysis) {
+    if (state.success) {
       setRecordingState("finished");
     } else if (state.error) {
       setRecordingState("error");
@@ -105,7 +106,7 @@ export function PracticeSession() {
   const resetSession = () => {
     setRecordingState("idle");
     setAudioDataUri("");
-    state.analysis = undefined;
+    state.success = undefined;
     state.error = undefined;
     state.formErrors = undefined;
   };
@@ -116,7 +117,7 @@ export function PracticeSession() {
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Interview Practice Session</h1>
           <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
-            Select a question, record your answer, and get instant AI feedback.
+            Select a question, record your answer, and get personalized feedback from our experts.
           </p>
         </div>
 
@@ -176,50 +177,35 @@ export function PracticeSession() {
         ) : recordingState === 'processing' ? (
             <div className="flex flex-col items-center justify-center text-center gap-4 py-16">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                <h2 className="text-2xl font-semibold">Analyzing your response...</h2>
-                <p className="text-muted-foreground">Our AI is working its magic. This might take a moment.</p>
+                <h2 className="text-2xl font-semibold">Submitting your response...</h2>
+                <p className="text-muted-foreground">Please wait while we upload your recording for review.</p>
             </div>
         ) : (
           <div>
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold">Your Feedback</h2>
-              <p className="text-muted-foreground">Here's the AI analysis of your response to: "{selectedQuestion}"</p>
-            </div>
-
-            {state.error && (
-              <Alert variant="destructive" className="mb-8">
-                <AlertTitle>Analysis Failed</AlertTitle>
-                <AlertDescription>{state.error}</AlertDescription>
-              </Alert>
-            )}
-
-            {state.analysis && (
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="md:col-span-2">
-                  <CardHeader><CardTitle>Overall Feedback</CardTitle></CardHeader>
-                  <CardContent><p className="text-muted-foreground">{state.analysis.overallFeedback}</p></CardContent>
-                </Card>
-                <Card className="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
-                  <CardHeader className="flex-row items-center gap-2 space-y-0">
-                    <Star className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <CardTitle>Strengths</CardTitle>
-                  </CardHeader>
-                  <CardContent><p className="text-muted-foreground">{state.analysis.strengths}</p></CardContent>
-                </Card>
-                <Card className="bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800">
-                  <CardHeader className="flex-row items-center gap-2 space-y-0">
-                    <ThumbsDown className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    <CardTitle>Areas for Improvement</CardTitle>
-                  </CardHeader>
-                  <CardContent><p className="text-muted-foreground">{state.analysis.weaknesses}</p></CardContent>
-                </Card>
-                <Card>
-                  <CardHeader><CardTitle>Sentiment Analysis</CardTitle></CardHeader>
-                  <CardContent><p className="text-muted-foreground">{state.analysis.sentimentAnalysis}</p></CardContent>
-                </Card>
-                 <Card>
-                  <CardHeader><CardTitle>Keyword Analysis</CardTitle></CardHeader>
-                  <CardContent><p className="text-muted-foreground">{state.analysis.keywordAnalysis}</p></CardContent>
+            {state.error ? (
+              <div className="text-center mb-8 max-w-lg mx-auto">
+                <Alert variant="destructive" className="mb-8">
+                  <AlertTitle>Submission Failed</AlertTitle>
+                  <AlertDescription>{state.error}</AlertDescription>
+                </Alert>
+              </div>
+            ) : (
+              <div className="text-center mb-8 max-w-lg mx-auto">
+                 <Card className="w-full max-w-lg text-center">
+                    <CardHeader>
+                        <div className="mx-auto bg-green-100 dark:bg-green-900/20 rounded-full p-3 w-fit">
+                            <CheckCircle2 className="h-10 w-10 text-green-600 dark:text-green-400" />
+                        </div>
+                        <CardTitle className="text-2xl font-bold mt-4">Response Submitted!</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <p className="text-muted-foreground">
+                            Our experts will now review your response to the question: <strong>"{selectedQuestion}"</strong>
+                        </p>
+                        <p className="text-muted-foreground text-sm">
+                            You'll receive an email with your personalized feedback within 24-48 hours.
+                        </p>
+                    </CardContent>
                 </Card>
               </div>
             )}

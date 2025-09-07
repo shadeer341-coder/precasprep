@@ -1,6 +1,6 @@
+
 "use server";
 
-import { analyzeInterviewResponse, type AnalyzeInterviewResponseOutput } from "@/ai/flows/analyze-interview-response";
 import { z } from "zod";
 
 const ActionInputSchema = z.object({
@@ -10,7 +10,7 @@ const ActionInputSchema = z.object({
 
 export type ActionState = {
   formErrors?: string[];
-  analysis?: AnalyzeInterviewResponseOutput;
+  success?: boolean;
   error?: string;
 };
 
@@ -23,16 +23,25 @@ export async function getInterviewFeedback(prevState: ActionState, formData: For
   if (!validatedFields.success) {
     return {
       formErrors: validatedFields.error.flatten().fieldErrors.audioDataUri,
+      error: "Validation failed. Please ensure you have recorded an answer."
     };
   }
   
   const { audioDataUri, question } = validatedFields.data;
 
   try {
-    const analysis = await analyzeInterviewResponse({ audioDataUri, question });
-    return { analysis };
+    // In a real app, you would save the audio data and queue it for human review.
+    // For this prototype, we'll just simulate a successful submission.
+    console.log("Interview response submitted for review:");
+    console.log("Question:", question);
+    // console.log("Audio Data URI length:", audioDataUri.length);
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    return { success: true };
   } catch (e: any) {
     console.error(e);
-    return { error: e.message || "An unexpected error occurred while analyzing the response." };
+    return { error: e.message || "An unexpected error occurred while submitting the response." };
   }
 }

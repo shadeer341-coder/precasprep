@@ -133,7 +133,7 @@ export function About() {
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">Why Choose Us?</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Built to Help You Ace Your University Interview</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Practice with real questions, get instant AI feedback, and track progress, all in one place.
+              Practice with real questions, get expert feedback, and track progress, all in one place.
             </p>
           </div>
         </motion.div>
@@ -222,10 +222,10 @@ export function About() {
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                       <div className="flex-1">
-                        <CardTitle>Smart Proctoring</CardTitle>
-                        <p className="text-muted-foreground pt-2">With webcam checks and internet monitoring, you’ll experience a realistic interview environment.</p>
+                        <CardTitle>Expert Feedback</CardTitle>
+                        <p className="text-muted-foreground pt-2">Our team of experienced reviewers analyzes your responses to provide personalized, actionable feedback.</p>
                       </div>
-                      <Bot className="h-8 w-8 text-primary" />
+                      <Users className="h-8 w-8 text-primary" />
                     </CardHeader>
                 </div>
               </Card>

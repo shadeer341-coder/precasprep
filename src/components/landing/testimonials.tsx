@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 
 const testimonials = [
   {
-    quote: "Precasprep was a game-changer. The AI feedback helped me pinpoint exactly where I was going wrong. I got into my dream university!",
+    quote: "Precasprep was a game-changer. The expert feedback helped me pinpoint exactly where I was going wrong. I got into my dream university!",
     name: "Sarah L.",
     title: "Student, Stanford University",
     avatar: "SL",
@@ -46,7 +46,7 @@ const testimonials = [
     rating: 5,
   },
   {
-    quote: "The instant feedback is what makes this tool so powerful. I could practice a question and immediately see how to improve.",
+    quote: "The detailed feedback is what makes this tool so powerful. I could practice a question and immediately see how to improve.",
     name: "Emily White",
     title: "Student, Yale University",
     avatar: "EW",
@@ -132,7 +132,7 @@ export function Testimonials() {
         >
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Reviews</div>
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">What Our Users Say</h2>
+            <h2 className="text-3xl font.headline font-bold tracking-tighter sm:text-5xl">What Our Users Say</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Hear from students and educators who have found success with Precasprep.
             </p>
@@ -159,7 +159,3 @@ export function Testimonials() {
     </motion.section>
   );
 }
-
-    
-
-    
