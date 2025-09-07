@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '../theme-toggle';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
 
@@ -81,6 +81,12 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
+              <SheetHeader className="text-left">
+                <SheetTitle>Navigation</SheetTitle>
+                <SheetDescription>
+                  Navigate to other sections of the website.
+                </SheetDescription>
+              </SheetHeader>
               <nav className="grid gap-6 text-lg font-medium mt-8">
                  <Link href="/#about" className="text-foreground/80 transition-colors hover:text-foreground" onClick={() => setIsSheetOpen(false)}>
                     Why Choose Us?
