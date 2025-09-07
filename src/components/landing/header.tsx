@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '../theme-toggle';
 
 const Logo = () => (
   <svg
@@ -48,6 +49,7 @@ export function Header() {
           </Link>
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-4">
+          <ThemeToggle />
           <Button variant="ghost" asChild>
             <Link href="/login">Log in</Link>
           </Button>
