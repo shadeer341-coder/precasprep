@@ -1,11 +1,12 @@
 
 'use server';
 
-import {z} from 'zod';
-import {redirect} from 'next/navigation';
+import { z } from 'zod';
+import { redirect } from 'next/navigation';
 import { Resend } from 'resend';
 import { WelcomeEmail } from '@/emails/welcome';
 import { createServerClient } from '@/lib/supabase/server';
+import 'dotenv/config';
 
 const FormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -23,15 +24,17 @@ export type FormState = {
   };
 };
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 export async function submitPricingForm(prevState: FormState, formData: FormData): Promise<FormState> {
   // Check for environment variables
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.RESEND_API_KEY) {
-      return {
-        message: 'Server configuration error. Please check environment variables.',
-        errors: { _form: ['Application is not configured correctly.'] }
-      }
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !resend) {
+    console.error('Missing environment variables for Supabase or Resend');
+    return {
+      message: 'Server configuration error. Please check environment variables.',
+      errors: { _form: ['Application is not configured correctly.'] }
+    };
   }
 
   const validatedFields = FormSchema.safeParse({
@@ -47,7 +50,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     };
   }
 
-  const {name, email, plan} = validatedFields.data;
+  const { name, email, plan } = validatedFields.data;
   const tempPassword = Math.random().toString(36).slice(-8);
   const supabase = createServerClient();
 
@@ -68,12 +71,12 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     return {
       message: 'Could not create user. If you already have an account, please log in.',
       errors: { _form: [authError.message] }
-    }
+    };
   }
 
   // Send welcome email
   try {
-     await resend.emails.send({
+    await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: email,
       subject: `Welcome to precasprep - Your ${plan} Plan`,
@@ -85,7 +88,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     // await supabase.auth.admin.deleteUser(authData.user.id);
     return {
       message: 'There was an issue sending your confirmation email. Please try again.',
-    }
+    };
   }
 
   redirect(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
