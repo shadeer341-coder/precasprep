@@ -24,18 +24,18 @@ export type FormState = {
   };
 };
 
-const resendApiKey = process.env.RESEND_API_KEY;
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
-
 export async function submitPricingForm(prevState: FormState, formData: FormData): Promise<FormState> {
-  // Check for environment variables
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !resend) {
+  const resendApiKey = process.env.RESEND_API_KEY;
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !resendApiKey) {
     console.error('Missing environment variables for Supabase or Resend');
     return {
       message: 'Server configuration error. Please check environment variables.',
       errors: { _form: ['Application is not configured correctly.'] }
     };
   }
+
+  const resend = new Resend(resendApiKey);
 
   const validatedFields = FormSchema.safeParse({
     name: formData.get('name'),
