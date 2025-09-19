@@ -5,6 +5,7 @@ import {z} from 'zod';
 import {redirect} from 'next/navigation';
 import { Resend } from 'resend';
 import { WelcomeEmail } from '@/emails/welcome';
+import { createServerClient } from '@/lib/supabase/server';
 
 const FormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -18,6 +19,7 @@ export type FormState = {
     name?: string[];
     email?: string[];
     plan?: string[];
+    _form?: string[];
   };
 };
 
@@ -39,7 +41,29 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
 
   const {name, email, plan} = validatedFields.data;
   const tempPassword = Math.random().toString(36).slice(-8);
+  const supabase = createServerClient();
 
+  // Create user in Supabase
+  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    email: email,
+    password: tempPassword,
+    email_confirm: true, // Auto-confirm email for immediate login
+    user_metadata: {
+      name: name,
+      plan: plan,
+      password_is_temporary: true
+    }
+  });
+
+  if (authError) {
+    console.error('Supabase user creation error:', authError);
+    return {
+      message: 'Could not create user. If you already have an account, please log in.',
+      errors: { _form: [authError.message] }
+    }
+  }
+
+  // Send welcome email
   try {
      await resend.emails.send({
       from: 'onboarding@resend.dev',
@@ -49,6 +73,8 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     });
   } catch (error) {
     console.error('Email sending error:', error);
+    // Optionally, you might want to delete the user if the email fails
+    // await supabase.auth.admin.deleteUser(authData.user.id);
     return {
       message: 'There was an issue sending your confirmation email. Please try again.',
     }
