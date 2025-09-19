@@ -1,3 +1,3 @@
 
-import { config } from 'dotenv';
-config();
+// This space is intentionally left blank
+

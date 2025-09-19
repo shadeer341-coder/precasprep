@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation';
 import { Resend } from 'resend';
 import { WelcomeEmail } from '@/emails/welcome';
 import { createServerClient } from '@/lib/supabase/server';
-import 'dotenv/config';
 
 const FormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -35,8 +34,6 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     };
   }
 
-  const resend = new Resend(resendApiKey);
-
   const validatedFields = FormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -49,7 +46,8 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
       message: 'Please correct the errors below.',
     };
   }
-
+  
+  const resend = new Resend(resendApiKey);
   const { name, email, plan } = validatedFields.data;
   const tempPassword = Math.random().toString(36).slice(-8);
   const supabase = createServerClient();
