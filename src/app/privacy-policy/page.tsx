@@ -1,3 +1,6 @@
+
+"use client";
+
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 
