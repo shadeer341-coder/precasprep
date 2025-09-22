@@ -48,10 +48,35 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
   }
   
   const { name, email, plan } = validatedFields.data;
-  const tempPassword = Math.random().toString(36).slice(-8);
   const supabase = createServerClient();
 
-  // Create user in Supabase
+  // 1. Check if user already exists
+  const { data: existingUser, error: existingUserError } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', email)
+    .single();
+    
+  // A proper check for existing user from auth schema
+  const { data: { users }, error: userSearchError } = await supabase.auth.admin.listUsers({ email: email });
+
+  if (userSearchError) {
+    console.error('Error searching for user:', userSearchError);
+    return {
+        message: 'There was a problem checking for existing users.',
+        errors: { _form: ['Server error. Please try again.'] }
+    };
+  }
+
+  if (users && users.length > 0) {
+    return {
+      message: 'This email address is already registered. Please try logging in.',
+      errors: { _form: ['Email already in use.'] }
+    };
+  }
+
+  // 2. Create user if they don't exist
+  const tempPassword = Math.random().toString(36).slice(-8);
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: email,
     password: tempPassword,
@@ -65,12 +90,6 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
 
   if (authError) {
     console.error('Supabase user creation error:', authError);
-    if (authError.message.includes('unique constraint')) {
-        return {
-          message: 'This email address is already registered. Please try logging in.',
-          errors: { _form: ['Email already in use.'] }
-        };
-    }
     return {
       message: 'Could not create user. If you already have an account, please log in.',
       errors: { _form: [authError.message] }
@@ -84,7 +103,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     };
   }
 
-  // Send welcome email
+  // 3. Send welcome email
   try {
     const resend = new Resend(resendApiKey);
     await resend.emails.send({
@@ -98,10 +117,11 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     // Optionally, you might want to delete the user if the email fails to ensure a clean state
     await supabase.auth.admin.deleteUser(authData.user.id);
     return {
-      message: `We couldn't send your welcome email. The error was: ${error.message}`,
+      message: `We couldn't send your welcome email. Please check your email address and try again. Error: ${error.message}`,
       errors: { _form: ['Email delivery failed.'] }
     };
   }
 
+  // 4. Redirect on success
   redirect(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
 }
