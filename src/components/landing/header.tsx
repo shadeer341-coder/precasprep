@@ -66,7 +66,7 @@ export function Header() {
             <Link href="/login">Log in</Link>
           </Button>
           <Button asChild className="font-bold">
-            <Link href="/login">Sign up</Link>
+            <Link href="/#pricing">Sign up</Link>
           </Button>
         </div>
         
@@ -105,7 +105,7 @@ export function Header() {
                         <Link href="/login">Log in</Link>
                     </Button>
                     <Button asChild className="font-bold w-full">
-                        <Link href="/login">Sign up</Link>
+                        <Link href="/#pricing">Sign up</Link>
                     </Button>
                   </div>
               </nav>
