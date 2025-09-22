@@ -15,6 +15,9 @@ import { Label } from '@/components/ui/label';
 import { submitPricingForm, type FormState } from '@/app/pricing/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
 
 interface PricingDialogProps {
   open: boolean;
@@ -28,10 +31,11 @@ export function PricingDialog({ open, onOpenChange, planName }: PricingDialogPro
   const { toast } = useToast();
 
   useEffect(() => {
-    if (state.message && !state.errors) {
+    // This effect will show a toast for general server errors that aren't specific to a field.
+    if (state?.message && state.errors?._form) {
        toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Sign-up Error',
         description: state.message,
       });
     }
@@ -66,6 +70,17 @@ export function PricingDialog({ open, onOpenChange, planName }: PricingDialogPro
            {state.errors?.email && (
             <p className="col-span-4 text-destructive text-sm text-right -mt-2">{state.errors.email[0]}</p>
           )}
+
+          {state.errors?._form && (
+             <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                    {state.errors._form[0]}
+                </AlertDescription>
+            </Alert>
+          )}
+
           <Button type="submit" className="w-full mt-2" disabled={isPending}>
              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Submit and Proceed
