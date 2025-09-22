@@ -14,6 +14,10 @@ export function Footer() {
             © {new Date().getFullYear()} precasprep. All Rights Reserved.
           </p>
         </div>
+        <nav className="flex gap-4 sm:gap-6 text-sm text-muted-foreground">
+            <Link href="/#contact" className="transition-colors hover:text-foreground">Contact</Link>
+            <Link href="/privacy-policy" className="transition-colors hover:text-foreground">Privacy Policy</Link>
+        </nav>
       </div>
     </footer>
   );
