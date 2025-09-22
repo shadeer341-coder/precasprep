@@ -50,14 +50,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
   const { name, email, plan } = validatedFields.data;
   const supabase = createServerClient();
 
-  // 1. Check if user already exists
-  const { data: existingUser, error: existingUserError } = await supabase
-    .from('users')
-    .select('id')
-    .eq('email', email)
-    .single();
-    
-  // A proper check for existing user from auth schema
+  // 1. Check if user already exists in Supabase Auth
   const { data: { users }, error: userSearchError } = await supabase.auth.admin.listUsers({ email: email });
 
   if (userSearchError) {
