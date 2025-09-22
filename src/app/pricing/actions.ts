@@ -88,7 +88,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
   try {
     const resend = new Resend(resendApiKey);
     await resend.emails.send({
-      from: 'Precasprep <noreply@precasprep.com>',
+      from: 'onboarding@resend.dev',
       to: email,
       subject: `Welcome to precasprep - Your ${plan} Plan`,
       react: WelcomeEmail({ name, email, plan, tempPassword }),
