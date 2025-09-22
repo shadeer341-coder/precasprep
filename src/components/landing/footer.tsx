@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 
@@ -15,7 +16,7 @@ export function Footer() {
           </p>
         </div>
         <nav className="flex gap-4 sm:gap-6 text-sm text-muted-foreground">
-            <Link href="/#contact" className="transition-colors hover:text-foreground">Contact</Link>
+            <Link href="/terms-and-conditions" className="transition-colors hover:text-foreground">Terms & Conditions</Link>
             <Link href="/privacy-policy" className="transition-colors hover:text-foreground">Privacy Policy</Link>
         </nav>
       </div>
