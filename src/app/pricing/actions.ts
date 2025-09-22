@@ -47,7 +47,6 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     };
   }
   
-  const resend = new Resend(resendApiKey);
   const { name, email, plan } = validatedFields.data;
   const tempPassword = Math.random().toString(36).slice(-8);
   const supabase = createServerClient();
@@ -66,26 +65,41 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
 
   if (authError) {
     console.error('Supabase user creation error:', authError);
+    if (authError.message.includes('unique constraint')) {
+        return {
+          message: 'This email address is already registered. Please try logging in.',
+          errors: { _form: ['Email already in use.'] }
+        };
+    }
     return {
       message: 'Could not create user. If you already have an account, please log in.',
       errors: { _form: [authError.message] }
     };
   }
 
+  if (!authData.user) {
+     return {
+      message: 'An unexpected error occurred during user creation.',
+      errors: { _form: ['User data not returned from Supabase.'] }
+    };
+  }
+
   // Send welcome email
   try {
+    const resend = new Resend(resendApiKey);
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'Precasprep <noreply@precasprep.com>',
       to: email,
       subject: `Welcome to precasprep - Your ${plan} Plan`,
       react: WelcomeEmail({ name, email, plan, tempPassword }),
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Email sending error:', error);
-    // Optionally, you might want to delete the user if the email fails
-    // await supabase.auth.admin.deleteUser(authData.user.id);
+    // Optionally, you might want to delete the user if the email fails to ensure a clean state
+    await supabase.auth.admin.deleteUser(authData.user.id);
     return {
-      message: 'There was an issue sending your confirmation email. Please try again.',
+      message: `We couldn't send your welcome email. The error was: ${error.message}`,
+      errors: { _form: ['Email delivery failed.'] }
     };
   }
 
