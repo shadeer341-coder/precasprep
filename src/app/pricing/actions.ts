@@ -61,7 +61,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     };
   }
 
-  if (users && users.length > 0) {
+  if (users.length > 0) {
     return {
       message: 'This email address is already registered. Please try logging in.',
       errors: { _form: ['Email already in use.'] }
