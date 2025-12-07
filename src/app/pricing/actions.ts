@@ -51,6 +51,15 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
   const supabase = createServerClient();
   const tempPassword = Math.random().toString(36).slice(-8);
 
+  // Determine group_id based on plan name
+  let groupId: number;
+  if (plan.toLowerCase().includes('agency') || plan.toLowerCase().includes('enterprise')) {
+    groupId = 2; // agency
+  } else {
+    groupId = 3; // individual
+  }
+
+
   // 1. Attempt to create the user. Supabase will handle the check for existing emails.
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: email,
@@ -59,7 +68,8 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
     user_metadata: {
       name: name,
       plan: plan,
-      password_is_temporary: true
+      password_is_temporary: true,
+      group_id: groupId
     }
   });
 
