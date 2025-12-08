@@ -49,7 +49,7 @@ export async function submitPricingForm(prevState: FormState, formData: FormData
   
   const { name, email, plan } = validatedFields.data;
   const supabase = createServerClient();
-  const tempPassword = Math.random().toString(36).slice(-8);
+  const tempPassword = "asd@123";
 
   // Determine group_id based on plan name
   let groupId: number;
