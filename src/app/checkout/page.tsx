@@ -34,9 +34,6 @@ function CheckoutForm() {
     mode: 'onChange',
   });
 
-  const name = form.watch('name');
-  const email = form.watch('email');
-
   const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
   if (!paypalClientId) {
@@ -108,8 +105,7 @@ function CheckoutForm() {
               <PayPalCheckoutButton
                   planName={planName}
                   price={price}
-                  name={name}
-                  email={email}
+                  getFormData={() => form.getValues()}
                   disabled={!form.formState.isValid}
               />
           </PayPalScriptProvider>

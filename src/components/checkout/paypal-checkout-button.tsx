@@ -17,12 +17,11 @@ import { Loader2 } from 'lucide-react';
 interface PayPalCheckoutButtonProps {
   planName: string;
   price: string;
-  name: string;
-  email: string;
+  getFormData: () => { name: string; email: string };
   disabled: boolean;
 }
 
-const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPalCheckoutButtonProps) => {
+const PayPalCheckoutButton = ({ planName, price, getFormData, disabled }: PayPalCheckoutButtonProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -31,63 +30,43 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   const handleCreateOrder = useCallback(
     (data: CreateOrderData, actions: CreateOrderActions) => {
       setError(null);
-      console.log('Creating PayPal order with price:', price);
-      try {
-        const parsedPrice = parseFloat(price);
-        if (isNaN(parsedPrice) || parsedPrice <= 0) {
-          throw new Error('Invalid price. Please select a valid plan.');
-        }
-
-        return actions.order.create({
-          purchase_units: [
-            {
-              description: `precasprep - ${planName} Plan`,
-              amount: {
-                currency_code: 'USD',
-                value: parsedPrice.toFixed(2),
-              },
+      return actions.order.create({
+        purchase_units: [
+          {
+            description: `precasprep - ${planName} Plan`,
+            amount: {
+              currency_code: 'USD',
+              value: parseFloat(price).toFixed(2),
             },
-          ],
-          application_context: {
-            shipping_preference: 'NO_SHIPPING',
           },
-        });
-      } catch (error) {
-        const errorMessage = 'An error occurred while preparing your order. Please check the details and try again.';
-        console.error('Client-side error during order creation:', error);
-        setError(errorMessage);
-        toast({
-          variant: 'destructive',
-          title: 'Order Creation Error',
-          description: errorMessage,
-        });
-        return Promise.reject(error);
-      }
+        ],
+        application_context: {
+          shipping_preference: 'NO_SHIPPING',
+        },
+      });
     },
-    [price, planName, toast]
+    [price, planName]
   );
 
   const handleOnApprove = useCallback(
     async (data: OnApproveData, actions: OnApproveActions) => {
       if (!actions.order) {
-        const errorMessage = 'Could not process the order. Please contact support.';
-        setError(errorMessage);
-        toast({ variant: 'destructive', title: 'Payment Error', description: errorMessage });
+        toast({ variant: 'destructive', title: 'Payment Error', description: 'Could not find order actions.' });
         return;
       }
-
+      
       setIsProcessing(true);
       setError(null);
 
       try {
         const order = await actions.order.capture();
-        console.log('PayPal Order Captured:', order);
+        const { name, email } = getFormData();
         
         const userCreationResult = await processOrder({
           name,
           email,
           plan: planName,
-          orderId: data.orderID,
+          orderId: order.id,
         });
 
         if (userCreationResult.success) {
@@ -97,8 +76,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           });
           router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
         } else {
-          const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${data.orderID}. Reason: ${userCreationResult.message}`;
-          console.error('Post-payment account creation failed:', userCreationResult.message);
+           const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${order.id}. Reason: ${userCreationResult.message}`;
           setError(errorMessage);
           toast({
             variant: 'destructive',
@@ -106,7 +84,6 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
             description: errorMessage,
             duration: 30000, 
           });
-          setIsProcessing(false);
         }
 
       } catch (captureError) {
@@ -118,26 +95,23 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           title: 'Payment Failed',
           description: errorMessage,
         });
+      } finally {
         setIsProcessing(false);
       }
     },
-    [name, email, planName, router, toast]
+    [getFormData, planName, router, toast]
   );
   
   const handleOnError = useCallback(
     (err: any) => {
       console.error('PayPal onError callback triggered:', err);
-      
+      // Ignore errors from the user closing the window
       if (err && err.message && (err.message.includes('Window closed') || err.message.includes('cross-domain error'))) {
-        console.log('Payment window was closed by the user or timed out.');
-        setIsProcessing(false); 
         return; 
       }
-
       const errorMessage = 'An unexpected error occurred with PayPal. Please try again or contact support.';
       setError(errorMessage);
       toast({ variant: 'destructive', title: 'PayPal Payment Error', description: errorMessage });
-      setIsProcessing(false);
     },
     [toast]
   );
