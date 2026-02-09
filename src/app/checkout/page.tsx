@@ -1,12 +1,12 @@
 
 'use client';
 
-import { Suspense, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { PayPalScriptProvider, OnApproveData, CreateOrderData, CreateOrderActions, OnApproveActions } from '@paypal/react-paypal-js';
 
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
@@ -15,6 +15,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import PayPalCheckoutButton from '@/components/checkout/paypal-checkout-button';
+import { processOrder } from '@/app/checkout/actions';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -23,8 +26,14 @@ const formSchema = z.object({
 
 function CheckoutForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { toast } = useToast();
+
   const planName = searchParams.get('plan') || 'N/A';
   const price = searchParams.get('price') || '0';
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,13 +46,93 @@ function CheckoutForm() {
 
   const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
-  const getFormData = useCallback(() => {
-    return form.getValues();
-  }, [form]);
-
   if (!paypalClientId) {
     return <p>Could not load payment provider. Please contact support.</p>;
   }
+
+  const createOrder = (data: CreateOrderData, actions: CreateOrderActions) => {
+    // The form must be valid before we even attempt to create an order
+    if (!form.formState.isValid) {
+      setError("Please fill out your details before proceeding.");
+      toast({
+        variant: 'destructive',
+        title: 'Invalid Details',
+        description: "Please fill out your name and email before proceeding to payment.",
+      });
+      return Promise.reject(new Error("Invalid form data."));
+    }
+    setError(null);
+    return actions.order.create({
+      purchase_units: [
+        {
+          description: `precasprep - ${planName} Plan`,
+          amount: {
+            currency_code: 'USD',
+            value: parseFloat(price).toFixed(2),
+          },
+        },
+      ],
+      application_context: {
+        shipping_preference: 'NO_SHIPPING',
+      },
+    });
+  };
+
+  const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      if (!actions.order) {
+        throw new Error('Order actions not available. Please try again.');
+      }
+      
+      const order = await actions.order.capture();
+      const { name, email } = form.getValues();
+      
+      const userCreationResult = await processOrder({
+        name,
+        email,
+        plan: planName,
+        orderId: order.id,
+      });
+
+      if (userCreationResult.success) {
+        toast({
+          title: 'Payment Successful!',
+          description: 'Your account has been created. Redirecting...',
+        });
+        router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+      } else {
+        const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${order.id}. Reason: ${userCreationResult.message}`;
+        setError(errorMessage);
+        toast({
+          variant: 'destructive',
+          title: 'Account Registration Failed',
+          description: errorMessage,
+          duration: 30000, 
+        });
+        setIsProcessing(false);
+      }
+
+    } catch (captureError: any) {
+      console.error('Error during PayPal checkout:', captureError);
+      
+      // Don't show an error if the user manually closed the PayPal window
+      if (captureError.message && captureError.message.includes('Window closed')) {
+         // Silently fail. The user has cancelled the action.
+      } else {
+        const errorMessage = "Your payment could not be processed. Please try again or use a different payment method.";
+        setError(errorMessage);
+        toast({
+          variant: 'destructive',
+          title: 'Payment Failed',
+          description: errorMessage,
+        });
+      }
+      setIsProcessing(false);
+    }
+  };
   
   return (
     <div className="grid md:grid-cols-2 gap-12 max-w-4xl w-full">
@@ -105,16 +194,30 @@ function CheckoutForm() {
           </CardContent>
         </Card>
 
-        <div>
-          <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
-              <PayPalCheckoutButton
-                  planName={planName}
-                  price={price}
-                  getFormData={getFormData}
-                  disabled={!form.formState.isValid}
-              />
-          </PayPalScriptProvider>
-          { !form.formState.isValid && <p className="text-center text-sm text-muted-foreground mt-2">Please fill out your details to pay with PayPal.</p> }
+        <div className="w-full">
+          {isProcessing ? (
+            <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-md min-h-[76px]">
+              <div className="flex items-center">
+                <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                <span>Processing your order...</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">Please do not close this window.</p>
+            </div>
+          ) : (
+            <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
+                <PayPalCheckoutButton
+                    createOrder={createOrder}
+                    onApprove={onApprove}
+                    disabled={!form.formState.isValid}
+                />
+            </PayPalScriptProvider>
+          )}
+
+          {error && (
+            <p className="text-destructive text-sm mt-2 text-center">{error}</p>
+          )}
+
+          { !isProcessing && !form.formState.isValid && <p className="text-center text-sm text-muted-foreground mt-2">Please fill out your details to pay with PayPal.</p> }
         </div>
       </div>
     </div>
