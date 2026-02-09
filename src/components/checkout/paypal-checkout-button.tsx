@@ -69,7 +69,6 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
 
   const handleOnApprove = useCallback(
     async (data: OnApproveData, actions: OnApproveActions) => {
-      // This function is now structured to capture payment first.
       if (!actions.order) {
         const errorMessage = 'Could not process the order. Please contact support.';
         setError(errorMessage);
@@ -81,11 +80,9 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
       setError(null);
 
       try {
-        // 1. Capture the payment immediately. This is fast and prevents timeouts.
         const order = await actions.order.capture();
         console.log('PayPal Order Captured:', order);
         
-        // 2. Now that payment is secure, process the order (create user, send email).
         const userCreationResult = await processOrder({
           name,
           email,
@@ -93,7 +90,6 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           orderId: data.orderID,
         });
 
-        // 3. Handle the result of order processing.
         if (userCreationResult.success) {
           toast({
             title: 'Payment Successful!',
@@ -101,7 +97,6 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           });
           router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
         } else {
-          // This is the critical failure case: payment succeeded, but account creation failed.
           const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${data.orderID}. Reason: ${userCreationResult.message}`;
           console.error('Post-payment account creation failed:', userCreationResult.message);
           setError(errorMessage);
@@ -109,13 +104,12 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
             variant: 'destructive',
             title: 'Account Registration Failed',
             description: errorMessage,
-            duration: 30000, // Make toast more persistent
+            duration: 30000, 
           });
           setIsProcessing(false);
         }
 
       } catch (captureError) {
-        // This block now only handles failures in capturing the payment itself.
         console.error('Error capturing PayPal order:', captureError);
         const errorMessage = "Your payment could not be processed. Please try again or use a different payment method.";
         setError(errorMessage);
@@ -134,10 +128,9 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
     (err: any) => {
       console.error('PayPal onError callback triggered:', err);
       
-      // This error often means the user closed the PayPal popup. We can safely ignore it.
       if (err && err.message && (err.message.includes('Window closed') || err.message.includes('cross-domain error'))) {
         console.log('Payment window was closed by the user or timed out.');
-        setIsProcessing(false); // Make sure to stop spinner if user cancels
+        setIsProcessing(false); 
         return; 
       }
 
@@ -162,7 +155,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
       ) : (
         <>
           <PayPalButtons
-            key={planName + price + name + email + disabled} // Force re-render when details change
+            key={planName + price}
             style={{ layout: 'vertical', label: 'pay' }}
             createOrder={handleCreateOrder}
             onApprove={handleOnApprove}
