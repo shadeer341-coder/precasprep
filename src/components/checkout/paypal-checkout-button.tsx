@@ -48,59 +48,55 @@ const PayPalCheckoutButton = ({ planName, price, getFormData, disabled }: PayPal
     [price, planName]
   );
 
-  const onApprove = useCallback(
-    (data: OnApproveData, actions: OnApproveActions) => {
-      setIsProcessing(true);
-      setError(null);
+  const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+    setIsProcessing(true);
+    setError(null);
 
+    try {
       if (!actions.order) {
-        toast({ variant: 'destructive', title: 'Payment Error', description: 'Could not find order actions.' });
-        setIsProcessing(false);
-        return Promise.reject(new Error('Order actions not available'));
+        throw new Error('Order actions not available. Please try again.');
+      }
+      
+      const order = await actions.order.capture();
+      
+      // At this point, the payment is captured. PayPal is happy.
+      // Now, we handle our own server-side logic.
+      
+      const { name, email } = getFormData();
+      
+      const userCreationResult = await processOrder({
+        name,
+        email,
+        plan: planName,
+        orderId: order.id,
+      });
+
+      if (userCreationResult.success) {
+        toast({
+          title: 'Payment Successful!',
+          description: 'Your account has been created. Redirecting...',
+        });
+        router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+      } else {
+        // This case handles when payment succeeded but our user creation failed (e.g., duplicate email).
+        const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${order.id}. Reason: ${userCreationResult.message}`;
+        setError(errorMessage);
+        toast({
+          variant: 'destructive',
+          title: 'Account Registration Failed',
+          description: errorMessage,
+          duration: 30000, 
+        });
       }
 
-      // This returns the promise chain as expected by the SDK
-      return actions.order.capture().then(async (order) => {
-        const { name, email } = getFormData();
-        
-        try {
-          const userCreationResult = await processOrder({
-            name,
-            email,
-            plan: planName,
-            orderId: order.id,
-          });
-
-          if (userCreationResult.success) {
-            toast({
-              title: 'Payment Successful!',
-              description: 'Your account has been created. Redirecting...',
-            });
-            router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
-          } else {
-            const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${order.id}. Reason: ${userCreationResult.message}`;
-            setError(errorMessage);
-            toast({
-              variant: 'destructive',
-              title: 'Account Registration Failed',
-              description: errorMessage,
-              duration: 30000, 
-            });
-          }
-        } catch (serverError) {
-           const errorMessage = `Your payment was successful, but a server error occurred. Please contact support with Order ID: ${order.id}.`;
-           setError(errorMessage);
-           toast({
-              variant: 'destructive',
-              title: 'Server Error',
-              description: errorMessage,
-              duration: 30000,
-           })
-        } finally {
-          setIsProcessing(false);
-        }
-      }).catch((captureError) => {
-        console.error('Error capturing PayPal order:', captureError);
+    } catch (captureError: any) {
+      console.error('Error during PayPal checkout:', captureError);
+      
+      // Special handling for user-cancelled payments, which shouldn't show a big error.
+      if (captureError.message && (captureError.message.includes('Window closed') || captureError.message.includes('cross-domain error'))) {
+        // User likely closed the window manually. Don't show an error.
+        setError(null);
+      } else {
         const errorMessage = "Your payment could not be processed. Please try again or use a different payment method.";
         setError(errorMessage);
         toast({
@@ -108,30 +104,20 @@ const PayPalCheckoutButton = ({ planName, price, getFormData, disabled }: PayPal
           title: 'Payment Failed',
           description: errorMessage,
         });
-        setIsProcessing(false);
-        // Re-throw to signal a failure to the PayPal SDK
-        throw captureError;
-      });
-    },
-    [getFormData, planName, price, router, toast]
-  );
-  
-  const onError = useCallback(
-    (err: any) => {
-      console.error('PayPal onError callback triggered:', err);
-      // This error often happens when the user closes the pop-up, so we can safely ignore it.
-      if (err && err.message && (err.message.includes('Window closed') || err.message.includes('cross-domain error'))) {
-        setIsProcessing(false); // Make sure to reset processing state
-        return; 
       }
-      
-      const errorMessage = 'An unexpected error occurred with PayPal. Please try again or contact support.';
-      setError(errorMessage);
-      toast({ variant: 'destructive', title: 'PayPal Payment Error', description: errorMessage });
+    } finally {
       setIsProcessing(false);
-    },
-    [toast]
-  );
+    }
+  };
+  
+  const onError = (err: any) => {
+    // This handler is for errors that occur *before* onApprove, e.g., if the popup fails to open.
+    // The "Window closed" error you're seeing happens during onApprove, so it's caught there now.
+    console.error('PayPal Buttons onError:', err);
+    setError('An unexpected error occurred with PayPal. Please refresh the page and try again.');
+    toast({ variant: 'destructive', title: 'PayPal Error', description: 'Could not initialize PayPal checkout.' });
+    setIsProcessing(false);
+  };
 
   return (
     <div className="w-full">
