@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Suspense, useCallback, useState } from 'react';
@@ -50,8 +49,7 @@ function CheckoutForm() {
     return <p>Could not load payment provider. Please contact support.</p>;
   }
 
-  const createOrder = (data: CreateOrderData, actions: CreateOrderActions) => {
-    // Validation is now handled in `onClick`, so we can create the order directly.
+  const createOrder = useCallback((data: CreateOrderData, actions: CreateOrderActions) => {
     setError(null);
     return actions.order.create({
       purchase_units: [
@@ -67,9 +65,9 @@ function CheckoutForm() {
         shipping_preference: 'NO_SHIPPING',
       },
     });
-  };
+  }, [planName, price]);
 
-  const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+  const onApprove = useCallback(async (data: OnApproveData, actions: OnApproveActions) => {
     setIsProcessing(true);
     setError(null);
 
@@ -109,9 +107,9 @@ function CheckoutForm() {
     } catch (captureError: any) {
       console.error('Error during PayPal checkout:', captureError);
       
-      // onCancel should handle this, but as a fallback, don't show an error if the user manually closed the PayPal window.
       if (captureError.message && captureError.message.includes('Window closed')) {
-         // Silently fail. The user has cancelled the action.
+         // This can happen if the user manually closes the PayPal window.
+         // onCancel will handle the user-facing toast message.
       } else {
         const errorMessage = "Your payment could not be processed. Please try again or use a different payment method.";
         setError(errorMessage);
@@ -123,11 +121,9 @@ function CheckoutForm() {
       }
       setIsProcessing(false);
     }
-  };
+  }, [form, planName, router, toast]);
   
-  const handleOnClick = (data: OnClickData, actions: OnClickActions) => {
-    // This is the correct place for pre-payment validation.
-    // It prevents the PayPal popup from opening if the form is invalid.
+  const handleOnClick = useCallback((data: OnClickData, actions: OnClickActions) => {
     if (!form.formState.isValid) {
       toast({
         variant: "destructive",
@@ -137,16 +133,15 @@ function CheckoutForm() {
       return actions.reject();
     }
     return actions.resolve();
-  };
+  }, [form, toast]);
 
-  const handleOnCancel = () => {
-    // Fired when the user closes the PayPal popup.
+  const handleOnCancel = useCallback(() => {
     console.log("PayPal payment cancelled by user.");
     toast({
         title: 'Payment Cancelled',
         description: 'You have cancelled the payment process.',
     });
-  };
+  }, [toast]);
 
   return (
     <div className="grid md:grid-cols-2 gap-12 max-w-4xl w-full">
