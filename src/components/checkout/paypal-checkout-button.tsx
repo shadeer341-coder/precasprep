@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useCallback } from 'react';
@@ -28,31 +29,51 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   const [error, setError] = useState<string | null>(null);
 
   const handleCreateOrder = useCallback((data: CreateOrderData, actions: CreateOrderActions) => {
-    const parsedPrice = parseFloat(price);
-    if (isNaN(parsedPrice) || parsedPrice <= 0) {
-      setError("Invalid price. Please select a valid plan.");
+    console.log("Attempting to create PayPal order...");
+    console.log("Data received:", { price, planName });
+
+    try {
+      const parsedPrice = parseFloat(price);
+      if (isNaN(parsedPrice) || parsedPrice <= 0) {
+        const err = "Invalid price. Please select a valid plan.";
+        console.error(err, { price });
+        setError(err);
+        toast({
+          variant: "destructive",
+          title: "Invalid Price",
+          description: "The price for the selected plan is invalid.",
+        });
+        return Promise.reject(new Error(err));
+      }
+
+      const orderPayload = {
+        purchase_units: [
+          {
+            description: `precasprep - ${planName} Plan`,
+            amount: {
+              value: parsedPrice.toFixed(2),
+              currency_code: 'USD',
+            },
+          },
+        ],
+        application_context: {
+          shipping_preference: 'NO_SHIPPING',
+        }
+      };
+
+      console.log("Creating order with payload:", JSON.stringify(orderPayload, null, 2));
+
+      return actions.order.create(orderPayload);
+    } catch (error) {
+      console.error("Caught error during order creation:", error);
+      setError("A client-side error occurred before creating the order. Check the console.");
       toast({
         variant: "destructive",
-        title: "Invalid Price",
-        description: "The price for the selected plan is invalid.",
+        title: "Client Error",
+        description: "An error occurred while preparing your order.",
       });
-      return Promise.reject(new Error("Invalid price"));
+      return Promise.reject(error);
     }
-    
-    return actions.order.create({
-      purchase_units: [
-        {
-          description: `precasprep - ${planName} Plan`,
-          amount: {
-            value: parsedPrice.toFixed(2),
-            currency_code: 'USD',
-          },
-        },
-      ],
-      application_context: {
-        shipping_preference: 'NO_SHIPPING',
-      }
-    });
   }, [price, planName, toast]);
 
   const handleOnApprove = useCallback(async (data: OnApproveData, actions: OnApproveActions) => {
@@ -104,13 +125,20 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   }, [name, email, planName, router, toast]);
 
   const handleOnError = useCallback((err: any) => {
-    setError('An error occurred with the PayPal payment. Please check your details and try again.');
+    console.error('PayPal onError callback triggered:', err);
+    let errorMessage = 'An error occurred with the PayPal payment. Please check your details and try again.';
+    
+    // Try to get a more specific message if available
+    if (err && err.message) {
+        errorMessage = err.message;
+    }
+
+    setError(errorMessage);
     toast({
         variant: 'destructive',
-        title: 'PayPal Error',
-        description: 'Something went wrong with the payment. Check the console for details.',
+        title: 'PayPal Payment Error',
+        description: "Something went wrong. Check the developer console for more details.",
     });
-    console.error('PayPal Checkout Error:', err);
   }, [toast]);
 
   return (
