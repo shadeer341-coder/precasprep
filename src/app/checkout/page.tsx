@@ -203,32 +203,34 @@ function CheckoutForm() {
           </CardContent>
         </Card>
 
-        <div className="w-full">
-          {isProcessing ? (
-            <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-md min-h-[76px]">
-              <div className="flex items-center">
-                <Loader2 className="h-6 w-6 animate-spin mr-2" />
-                <span>Processing your order...</span>
+        <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
+          <div className="w-full relative min-h-[76px]">
+            {isProcessing && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-muted/80 rounded-md z-10">
+                <div className="flex items-center">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>Processing your order...</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">Please do not close this window.</p>
               </div>
-              <p className="text-sm text-muted-foreground mt-1">Please do not close this window.</p>
+            )}
+            <div style={isProcessing ? { pointerEvents: "none", opacity: 0.5 } : {}}>
+              <PayPalCheckoutButton
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                  onClick={handleOnClick}
+                  onCancel={handleOnCancel}
+              />
             </div>
-          ) : (
-            <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
-                <PayPalCheckoutButton
-                    createOrder={createOrder}
-                    onApprove={onApprove}
-                    onClick={handleOnClick}
-                    onCancel={handleOnCancel}
-                />
-            </PayPalScriptProvider>
-          )}
-
-          {error && (
+          </div>
+        </PayPalScriptProvider>
+        
+        {error && (
             <p className="text-destructive text-sm mt-2 text-center">{error}</p>
-          )}
+        )}
 
-          { !isProcessing && !form.formState.isValid && <p className="text-center text-sm text-muted-foreground mt-2">Please fill out your details to pay with PayPal.</p> }
-        </div>
+        { !isProcessing && !form.formState.isValid && <p className="text-center text-sm text-muted-foreground">Please fill out your details to pay with PayPal.</p> }
+        
       </div>
     </div>
   );
