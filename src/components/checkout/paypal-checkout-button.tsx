@@ -45,6 +45,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           description: `precasprep - ${planName} Plan`,
           amount: {
             value: parsedPrice.toFixed(2),
+            currency_code: 'USD',
           },
         },
       ],
