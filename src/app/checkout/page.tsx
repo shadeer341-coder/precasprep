@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -35,6 +36,10 @@ function CheckoutForm() {
   });
 
   const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+  const getFormData = useCallback(() => {
+    return form.getValues();
+  }, [form]);
 
   if (!paypalClientId) {
     return <p>Could not load payment provider. Please contact support.</p>;
@@ -105,7 +110,7 @@ function CheckoutForm() {
               <PayPalCheckoutButton
                   planName={planName}
                   price={price}
-                  getFormData={() => form.getValues()}
+                  getFormData={getFormData}
                   disabled={!form.formState.isValid}
               />
           </PayPalScriptProvider>
