@@ -7,25 +7,32 @@ import {
   CreateOrderData,
   CreateOrderActions,
   OnApproveActions,
+  OnClickData,
+  OnClickActions,
 } from '@paypal/react-paypal-js';
 import { useToast } from '@/hooks/use-toast';
 
 interface PayPalCheckoutButtonProps {
-  disabled: boolean;
   createOrder: (data: CreateOrderData, actions: CreateOrderActions) => Promise<string>;
   onApprove: (data: OnApproveData, actions: OnApproveActions) => Promise<void>;
+  onClick: (data: OnClickData, actions: OnClickActions) => Promise<any> | void;
+  onCancel: () => void;
 }
 
-const PayPalCheckoutButton = ({ disabled, createOrder, onApprove }: PayPalCheckoutButtonProps) => {
+const PayPalCheckoutButton = ({ 
+  createOrder, 
+  onApprove,
+  onClick,
+  onCancel,
+}: PayPalCheckoutButtonProps) => {
   const { toast } = useToast();
 
-  // This handler is for fatal errors with the PayPal script itself (e.g., network issues loading it)
   const onError = (err: any) => {
     console.error('PayPal Buttons onError:', err);
     toast({ 
         variant: 'destructive', 
         title: 'PayPal Error', 
-        description: 'Could not initialize PayPal checkout. Please refresh the page and try again.' 
+        description: 'A payment error occurred. Please refresh and try again or contact support.'
     });
   };
 
@@ -33,10 +40,11 @@ const PayPalCheckoutButton = ({ disabled, createOrder, onApprove }: PayPalChecko
     <div className="w-full">
       <PayPalButtons
         style={{ layout: 'vertical', label: 'pay' }}
-        disabled={disabled}
         createOrder={createOrder}
         onApprove={onApprove}
         onError={onError}
+        onClick={onClick}
+        onCancel={onCancel}
       />
     </div>
   );

@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { PayPalScriptProvider, OnApproveData, CreateOrderData, CreateOrderActions, OnApproveActions } from '@paypal/react-paypal-js';
+import { PayPalScriptProvider, OnApproveData, CreateOrderData, CreateOrderActions, OnApproveActions, OnClickData, OnClickActions } from '@paypal/react-paypal-js';
 
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
@@ -51,16 +51,7 @@ function CheckoutForm() {
   }
 
   const createOrder = (data: CreateOrderData, actions: CreateOrderActions) => {
-    // The form must be valid before we even attempt to create an order
-    if (!form.formState.isValid) {
-      setError("Please fill out your details before proceeding.");
-      toast({
-        variant: 'destructive',
-        title: 'Invalid Details',
-        description: "Please fill out your name and email before proceeding to payment.",
-      });
-      return Promise.reject(new Error("Invalid form data."));
-    }
+    // Validation is now handled in `onClick`, so we can create the order directly.
     setError(null);
     return actions.order.create({
       purchase_units: [
@@ -118,7 +109,7 @@ function CheckoutForm() {
     } catch (captureError: any) {
       console.error('Error during PayPal checkout:', captureError);
       
-      // Don't show an error if the user manually closed the PayPal window
+      // onCancel should handle this, but as a fallback, don't show an error if the user manually closed the PayPal window.
       if (captureError.message && captureError.message.includes('Window closed')) {
          // Silently fail. The user has cancelled the action.
       } else {
@@ -134,6 +125,29 @@ function CheckoutForm() {
     }
   };
   
+  const handleOnClick = (data: OnClickData, actions: OnClickActions) => {
+    // This is the correct place for pre-payment validation.
+    // It prevents the PayPal popup from opening if the form is invalid.
+    if (!form.formState.isValid) {
+      toast({
+        variant: "destructive",
+        title: "Invalid Details",
+        description: "Please fill out your name and email before proceeding to payment.",
+      });
+      return actions.reject();
+    }
+    return actions.resolve();
+  };
+
+  const handleOnCancel = () => {
+    // Fired when the user closes the PayPal popup.
+    console.log("PayPal payment cancelled by user.");
+    toast({
+        title: 'Payment Cancelled',
+        description: 'You have cancelled the payment process.',
+    });
+  };
+
   return (
     <div className="grid md:grid-cols-2 gap-12 max-w-4xl w-full">
       <Card>
@@ -208,7 +222,8 @@ function CheckoutForm() {
                 <PayPalCheckoutButton
                     createOrder={createOrder}
                     onApprove={onApprove}
-                    disabled={!form.formState.isValid}
+                    onClick={handleOnClick}
+                    onCancel={handleOnCancel}
                 />
             </PayPalScriptProvider>
           )}
