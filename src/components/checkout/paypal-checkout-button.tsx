@@ -2,7 +2,13 @@
 'use client';
 
 import { useState } from 'react';
-import { PayPalButtons, OnApproveData, CreateOrderData } from '@paypal/react-paypal-js';
+import { 
+    PayPalButtons, 
+    OnApproveData, 
+    CreateOrderData, 
+    CreateOrderActions, 
+    OnApproveActions 
+} from '@paypal/react-paypal-js';
 import { processOrder } from '@/app/checkout/actions';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
@@ -22,13 +28,25 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleCreateOrder = (data: CreateOrderData, actions: any) => {
+  const handleCreateOrder = (data: CreateOrderData, actions: CreateOrderActions) => {
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+      setError("Invalid price. Please select a valid plan.");
+      toast({
+        variant: "destructive",
+        title: "Invalid Price",
+        description: "The price for the selected plan is invalid.",
+      });
+      // Returning a rejected promise signals an error to the PayPal script.
+      return Promise.reject(new Error("Invalid price"));
+    }
+    
     return actions.order.create({
       purchase_units: [
         {
           description: `precasprep - ${planName} Plan`,
           amount: {
-            value: price,
+            value: parsedPrice.toFixed(2),
           },
         },
       ],
@@ -38,12 +56,17 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
     });
   };
 
-  const handleOnApprove = async (data: OnApproveData, actions: any) => {
+  const handleOnApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+    if (!actions.order) {
+      setError("Could not capture the order. Please contact support.");
+      toast({ variant: 'destructive', title: 'Payment Error', description: 'Could not capture the order.' });
+      return;
+    }
+
     setIsProcessing(true);
     setError(null);
 
     try {
-      // This step is not strictly necessary for order capture but can be useful for logging.
       const order = await actions.order.capture();
       console.log('PayPal Order Captured:', order);
 
@@ -86,7 +109,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
     toast({
         variant: 'destructive',
         title: 'PayPal Error',
-        description: 'Something went wrong with the payment.',
+        description: 'Something went wrong with the payment. Check the console for details.',
     });
     console.error('PayPal Checkout Error:', err);
   };
