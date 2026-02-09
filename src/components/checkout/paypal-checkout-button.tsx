@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import {
   PayPalButtons,
   OnApproveData,
@@ -21,20 +21,16 @@ interface PayPalCheckoutButtonProps {
   disabled: boolean;
 }
 
-type PaymentStatus = 'idle' | 'processing' | 'approved' | 'error';
-
 const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPalCheckoutButtonProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('idle');
-  const [orderID, setOrderID] = useState<string | null>(null);
 
   const handleCreateOrder = useCallback(
     (data: CreateOrderData, actions: CreateOrderActions) => {
       setError(null);
+      console.log('Creating PayPal order with price:', price);
       try {
         const parsedPrice = parseFloat(price);
         if (isNaN(parsedPrice) || parsedPrice <= 0) {
@@ -46,8 +42,8 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
             {
               description: `precasprep - ${planName} Plan`,
               amount: {
-                value: parsedPrice.toFixed(2),
                 currency_code: 'USD',
+                value: parsedPrice.toFixed(2),
               },
             },
           ],
@@ -56,14 +52,13 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           },
         });
       } catch (error) {
+        const errorMessage = 'An error occurred while preparing your order. Please check the details and try again.';
         console.error('Client-side error during order creation:', error);
-        setError(
-          'An error occurred while preparing your order. Please check the details and try again.'
-        );
+        setError(errorMessage);
         toast({
           variant: 'destructive',
           title: 'Order Creation Error',
-          description: 'Could not prepare your order for PayPal.',
+          description: errorMessage,
         });
         return Promise.reject(error);
       }
@@ -74,89 +69,74 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   const handleOnApprove = useCallback(
     async (data: OnApproveData, actions: OnApproveActions) => {
       if (!actions.order) {
-        setError('Could not capture the order. Please contact support.');
-        toast({
-          variant: 'destructive',
-          title: 'Payment Error',
-          description: 'Could not capture the order.',
-        });
+        const errorMessage = 'Could not capture the order. Please contact support.';
+        setError(errorMessage);
+        toast({ variant: 'destructive', title: 'Payment Error', description: errorMessage });
         return;
       }
 
+      setIsProcessing(true);
+
+      // 1. Attempt to create the user BEFORE capturing payment
+      const userCreationResult = await processOrder({
+        name,
+        email,
+        plan: planName,
+        orderId: data.orderID,
+      });
+
+      // 2. If user creation fails, show error and STOP. Do not capture payment.
+      if (!userCreationResult.success) {
+        setError(userCreationResult.message);
+        toast({
+          variant: 'destructive',
+          title: 'Registration Failed',
+          description: userCreationResult.message,
+        });
+        setIsProcessing(false);
+        return;
+      }
+
+      // 3. If user creation is successful, THEN capture the payment.
       try {
         const order = await actions.order.capture();
-        console.log('PayPal Order Captured, starting server processing:', order);
-        setOrderID(data.orderID);
-        setPaymentStatus('approved');
-        setIsProcessing(true); // Show spinner while server action runs
-      } catch (err) {
-        console.error('Error capturing order:', err);
-        setError('Failed to capture payment from PayPal. Please try again.');
+        console.log('PayPal Order Captured, user created successfully:', order);
+        
+        toast({
+          title: 'Payment Successful!',
+          description: 'Your account has been created. Redirecting...',
+        });
+        router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+      } catch (captureError) {
+        console.error('Error capturing order after user creation:', captureError);
+        const errorMessage = "Your payment was approved but we couldn't finalize it. Please contact support. Your account was created but payment failed.";
+        setError(errorMessage);
         toast({
           variant: 'destructive',
           title: 'Payment Capture Error',
-          description: "We couldn't finalize your payment with PayPal.",
+          description: errorMessage,
         });
-        setPaymentStatus('error');
+        setIsProcessing(false);
       }
     },
-    [toast]
+    [name, email, planName, router, toast]
   );
-
-  useEffect(() => {
-    if (paymentStatus === 'approved' && orderID) {
-      const runProcessOrder = async () => {
-        const result = await processOrder({
-          name,
-          email,
-          plan: planName,
-          orderId: orderID,
-        });
-
-        if (result.success) {
-          toast({
-            title: 'Payment Successful!',
-            description: 'Your account has been created. Redirecting...',
-          });
-          router.push(
-            `/thank-you?name=${encodeURIComponent(
-              name
-            )}&email=${encodeURIComponent(email)}`
-          );
-        } else {
-          setError(result.message);
-          toast({
-            variant: 'destructive',
-            title: 'Account Creation Failed',
-            description: result.message,
-          });
-          setIsProcessing(false); // Stop spinner on failure
-          setPaymentStatus('error');
-        }
-      };
-
-      runProcessOrder();
-    }
-  }, [paymentStatus, orderID, name, email, planName, router, toast]);
-
+  
   const handleOnError = useCallback(
     (err: any) => {
       console.error('PayPal onError callback triggered:', err);
       
+      // This error often means the user closed the PayPal popup. We can safely ignore it.
       if (err && err.message && err.message.includes('Window closed')) {
         console.log('Payment window was closed by the user.');
+        setIsProcessing(false); // Make sure to stop spinner if user cancels
         return; 
       }
 
-      const errorMessage =
-        'An error occurred with the PayPal payment. Please try again or contact support.';
-
+      const errorMessage = 'An error occurred with the PayPal payment. Please try again or contact support.';
       setError(errorMessage);
-      toast({
-        variant: 'destructive',
-        title: 'PayPal Payment Error',
-        description: errorMessage,
-      });
+      toast({ variant: 'destructive', title: 'PayPal Payment Error', description: errorMessage });
+      setIsProcessing(false);
     },
     [toast]
   );
@@ -171,7 +151,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
       ) : (
         <>
           <PayPalButtons
-            key={planName + price}
+            key={planName + price + name + email} // Force re-render when details change
             style={{ layout: 'vertical', label: 'pay' }}
             createOrder={handleCreateOrder}
             onApprove={handleOnApprove}

@@ -1,4 +1,3 @@
-
 'use server';
 
 import { z } from 'zod';
@@ -69,8 +68,8 @@ export async function processOrder(
 
   if (authError) {
     console.error('Supabase user creation error:', authError);
-    // Check if the error is because the user already exists
-    if (authError.message.includes('already registered')) {
+    // Check if the error is because the user already exists (HTTP 409 Conflict)
+    if (authError.status === 409) {
       return {
         success: false,
         message: 'This email address is already registered. Please try logging in.',
