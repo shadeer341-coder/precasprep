@@ -68,7 +68,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
           description: result.message,
         });
       }
-    } catch (err: any) { {
+    } catch (err: any) {
         setError('An unexpected error occurred during payment processing.');
         toast({
             variant: 'destructive',
@@ -76,7 +76,6 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
             description: 'Failed to process payment. Please try again.',
         });
         console.error(err);
-    }
     } finally {
       setIsProcessing(false);
     }
