@@ -1,13 +1,12 @@
-
 'use client';
 
-import { useState, useCallback } from 'react';
-import { 
-    PayPalButtons, 
-    OnApproveData, 
-    CreateOrderData, 
-    CreateOrderActions, 
-    OnApproveActions 
+import { useState, useCallback, useEffect } from 'react';
+import {
+  PayPalButtons,
+  OnApproveData,
+  CreateOrderData,
+  CreateOrderActions,
+  OnApproveActions,
 } from '@paypal/react-paypal-js';
 import { processOrder } from '@/app/checkout/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -22,143 +21,168 @@ interface PayPalCheckoutButtonProps {
   disabled: boolean;
 }
 
+type PaymentStatus = 'idle' | 'processing' | 'approved' | 'error';
+
 const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPalCheckoutButtonProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('idle');
+  const [orderID, setOrderID] = useState<string | null>(null);
 
-  const handleCreateOrder = useCallback((data: CreateOrderData, actions: CreateOrderActions) => {
-    console.log("Attempting to create PayPal order...");
-    console.log("Data received:", { price, planName });
+  const handleCreateOrder = useCallback(
+    (data: CreateOrderData, actions: CreateOrderActions) => {
+      setError(null);
+      try {
+        const parsedPrice = parseFloat(price);
+        if (isNaN(parsedPrice) || parsedPrice <= 0) {
+          throw new Error('Invalid price. Please select a valid plan.');
+        }
 
-    try {
-      const parsedPrice = parseFloat(price);
-      if (isNaN(parsedPrice) || parsedPrice <= 0) {
-        const err = "Invalid price. Please select a valid plan.";
-        console.error(err, { price });
-        setError(err);
-        toast({
-          variant: "destructive",
-          title: "Invalid Price",
-          description: "The price for the selected plan is invalid.",
+        return actions.order.create({
+          purchase_units: [
+            {
+              description: `precasprep - ${planName} Plan`,
+              amount: {
+                value: parsedPrice.toFixed(2),
+                currency_code: 'USD',
+              },
+            },
+          ],
+          application_context: {
+            shipping_preference: 'NO_SHIPPING',
+          },
         });
-        return Promise.reject(new Error(err));
+      } catch (error) {
+        console.error('Client-side error during order creation:', error);
+        setError(
+          'An error occurred while preparing your order. Please check the details and try again.'
+        );
+        toast({
+          variant: 'destructive',
+          title: 'Order Creation Error',
+          description: 'Could not prepare your order for PayPal.',
+        });
+        return Promise.reject(error);
+      }
+    },
+    [price, planName, toast]
+  );
+
+  const handleOnApprove = useCallback(
+    async (data: OnApproveData, actions: OnApproveActions) => {
+      if (!actions.order) {
+        setError('Could not capture the order. Please contact support.');
+        toast({
+          variant: 'destructive',
+          title: 'Payment Error',
+          description: 'Could not capture the order.',
+        });
+        return;
       }
 
-      const orderPayload = {
-        purchase_units: [
-          {
-            description: `precasprep - ${planName} Plan`,
-            amount: {
-              value: parsedPrice.toFixed(2),
-              currency_code: 'USD',
-            },
-          },
-        ],
-        application_context: {
-          shipping_preference: 'NO_SHIPPING',
+      try {
+        const order = await actions.order.capture();
+        console.log('PayPal Order Captured, starting server processing:', order);
+        setOrderID(data.orderID);
+        setPaymentStatus('approved');
+        setIsProcessing(true); // Show spinner while server action runs
+      } catch (err) {
+        console.error('Error capturing order:', err);
+        setError('Failed to capture payment from PayPal. Please try again.');
+        toast({
+          variant: 'destructive',
+          title: 'Payment Capture Error',
+          description: "We couldn't finalize your payment with PayPal.",
+        });
+        setPaymentStatus('error');
+      }
+    },
+    [toast]
+  );
+
+  useEffect(() => {
+    if (paymentStatus === 'approved' && orderID) {
+      const runProcessOrder = async () => {
+        const result = await processOrder({
+          name,
+          email,
+          plan: planName,
+          orderId: orderID,
+        });
+
+        if (result.success) {
+          toast({
+            title: 'Payment Successful!',
+            description: 'Your account has been created. Redirecting...',
+          });
+          router.push(
+            `/thank-you?name=${encodeURIComponent(
+              name
+            )}&email=${encodeURIComponent(email)}`
+          );
+        } else {
+          setError(result.message);
+          toast({
+            variant: 'destructive',
+            title: 'Account Creation Failed',
+            description: result.message,
+          });
+          setIsProcessing(false); // Stop spinner on failure
+          setPaymentStatus('error');
         }
       };
 
-      console.log("Creating order with payload:", JSON.stringify(orderPayload, null, 2));
-
-      return actions.order.create(orderPayload);
-    } catch (error) {
-      console.error("Caught error during order creation:", error);
-      setError("A client-side error occurred before creating the order. Check the console.");
-      toast({
-        variant: "destructive",
-        title: "Client Error",
-        description: "An error occurred while preparing your order.",
-      });
-      return Promise.reject(error);
+      runProcessOrder();
     }
-  }, [price, planName, toast]);
+  }, [paymentStatus, orderID, name, email, planName, router, toast]);
 
-  const handleOnApprove = useCallback(async (data: OnApproveData, actions: OnApproveActions) => {
-    if (!actions.order) {
-      setError("Could not capture the order. Please contact support.");
-      toast({ variant: 'destructive', title: 'Payment Error', description: 'Could not capture the order.' });
-      return;
-    }
-
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      const order = await actions.order.capture();
-      console.log('PayPal Order Captured:', order);
-
-      const result = await processOrder({
-        name,
-        email,
-        plan: planName,
-        orderId: data.orderID,
-      });
-
-      if (result.success) {
-        toast({
-          title: 'Payment Successful!',
-          description: 'Your account has been created. Redirecting...',
-        });
-        router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
-      } else {
-        setError(result.message);
-        toast({
-          variant: 'destructive',
-          title: 'An error occurred',
-          description: result.message,
-        });
+  const handleOnError = useCallback(
+    (err: any) => {
+      console.error('PayPal onError callback triggered:', err);
+      
+      if (err && err.message && err.message.includes('Window closed')) {
+        console.log('Payment window was closed by the user.');
+        return; 
       }
-    } catch (err: any) {
-        setError('An unexpected error occurred during payment processing.');
-        toast({
-            variant: 'destructive',
-            title: 'Payment Error',
-            description: 'Failed to process payment. Please try again.',
-        });
-        console.error(err);
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [name, email, planName, router, toast]);
 
-  const handleOnError = useCallback((err: any) => {
-    console.error('PayPal onError callback triggered:', err);
-    let errorMessage = 'An error occurred with the PayPal payment. Please check your details and try again.';
-    
-    // Try to get a more specific message if available
-    if (err && err.message) {
-        errorMessage = err.message;
-    }
+      const errorMessage =
+        'An error occurred with the PayPal payment. Please try again or contact support.';
 
-    setError(errorMessage);
-    toast({
+      setError(errorMessage);
+      toast({
         variant: 'destructive',
         title: 'PayPal Payment Error',
-        description: "Something went wrong. Check the developer console for more details.",
-    });
-  }, [toast]);
+        description: errorMessage,
+      });
+    },
+    [toast]
+  );
 
   return (
     <div className="w-full">
       {isProcessing ? (
-        <div className="flex items-center justify-center p-4 bg-muted rounded-md">
+        <div className="flex items-center justify-center p-4 bg-muted rounded-md h-[76px]">
           <Loader2 className="h-6 w-6 animate-spin mr-2" />
           <span>Processing your order...</span>
         </div>
       ) : (
-        <PayPalButtons
-          key={planName + price}
-          style={{ layout: 'vertical', label: 'pay' }}
-          createOrder={handleCreateOrder}
-          onApprove={handleOnApprove}
-          onError={handleOnError}
-          disabled={isProcessing || disabled}
-        />
+        <>
+          <PayPalButtons
+            key={planName + price}
+            style={{ layout: 'vertical', label: 'pay' }}
+            createOrder={handleCreateOrder}
+            onApprove={handleOnApprove}
+            onError={handleOnError}
+            disabled={disabled}
+          />
+          {error && (
+            <p className="text-destructive text-sm mt-2 text-center">{error}</p>
+          )}
+        </>
       )}
-      {error && <p className="text-destructive text-sm mt-2 text-center">{error}</p>}
     </div>
   );
 };
