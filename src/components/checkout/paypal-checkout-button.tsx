@@ -13,9 +13,10 @@ interface PayPalCheckoutButtonProps {
   price: string;
   name: string;
   email: string;
+  disabled: boolean;
 }
 
-const PayPalCheckoutButton = ({ planName, price, name, email }: PayPalCheckoutButtonProps) => {
+const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPalCheckoutButtonProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -104,7 +105,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email }: PayPalCheckoutBu
           createOrder={handleCreateOrder}
           onApprove={handleOnApprove}
           onError={handleOnError}
-          disabled={isProcessing}
+          disabled={isProcessing || disabled}
         />
       )}
       {error && <p className="text-destructive text-sm mt-2 text-center">{error}</p>}

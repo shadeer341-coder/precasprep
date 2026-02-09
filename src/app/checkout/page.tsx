@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Suspense } from 'react';
@@ -13,7 +12,6 @@ import { Footer } from '@/components/landing/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import PayPalCheckoutButton from '@/components/checkout/paypal-checkout-button';
 
@@ -35,6 +33,9 @@ function CheckoutForm() {
     },
     mode: 'onChange',
   });
+
+  const name = form.watch('name');
+  const email = form.watch('email');
 
   const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
@@ -102,16 +103,18 @@ function CheckoutForm() {
           </CardContent>
         </Card>
 
-        {form.formState.isValid && (
-           <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
-             <PayPalCheckoutButton
-                planName={planName}
-                price={price}
-                name={form.getValues('name')}
-                email={form.getValues('email')}
-             />
-           </PayPalScriptProvider>
-        )}
+        <div>
+          <PayPalScriptProvider options={{ clientId: paypalClientId, currency: 'USD', intent: 'capture' }}>
+              <PayPalCheckoutButton
+                  planName={planName}
+                  price={price}
+                  name={name}
+                  email={email}
+                  disabled={!form.formState.isValid}
+              />
+          </PayPalScriptProvider>
+          { !form.formState.isValid && <p className="text-center text-sm text-muted-foreground mt-2">Please fill out your details to pay with PayPal.</p> }
+        </div>
       </div>
     </div>
   );
