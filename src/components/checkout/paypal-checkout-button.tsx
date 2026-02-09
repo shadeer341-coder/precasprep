@@ -1,7 +1,6 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { 
     PayPalButtons, 
     OnApproveData, 
@@ -28,7 +27,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleCreateOrder = (data: CreateOrderData, actions: CreateOrderActions) => {
+  const handleCreateOrder = useCallback((data: CreateOrderData, actions: CreateOrderActions) => {
     const parsedPrice = parseFloat(price);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
       setError("Invalid price. Please select a valid plan.");
@@ -37,7 +36,6 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
         title: "Invalid Price",
         description: "The price for the selected plan is invalid.",
       });
-      // Returning a rejected promise signals an error to the PayPal script.
       return Promise.reject(new Error("Invalid price"));
     }
     
@@ -54,9 +52,9 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
         shipping_preference: 'NO_SHIPPING',
       }
     });
-  };
+  }, [price, planName, toast]);
 
-  const handleOnApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+  const handleOnApprove = useCallback(async (data: OnApproveData, actions: OnApproveActions) => {
     if (!actions.order) {
       setError("Could not capture the order. Please contact support.");
       toast({ variant: 'destructive', title: 'Payment Error', description: 'Could not capture the order.' });
@@ -102,9 +100,9 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [name, email, planName, router, toast]);
 
-  const handleOnError = (err: any) => {
+  const handleOnError = useCallback((err: any) => {
     setError('An error occurred with the PayPal payment. Please check your details and try again.');
     toast({
         variant: 'destructive',
@@ -112,7 +110,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
         description: 'Something went wrong with the payment. Check the console for details.',
     });
     console.error('PayPal Checkout Error:', err);
-  };
+  }, [toast]);
 
   return (
     <div className="w-full">
@@ -123,6 +121,7 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
         </div>
       ) : (
         <PayPalButtons
+          key={planName + price}
           style={{ layout: 'vertical', label: 'pay' }}
           createOrder={handleCreateOrder}
           onApprove={handleOnApprove}
