@@ -23,98 +23,11 @@ export type FormState = {
   };
 };
 
+// This function is being deprecated in favor of processOrder in checkout/actions.ts
+// It is kept here to avoid breaking any other potential dependencies but should be removed later.
 export async function submitPricingForm(prevState: FormState, formData: FormData): Promise<FormState> {
-  const resendApiKey = process.env.RESEND_API_KEY;
-
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !resendApiKey) {
-    console.error('Missing environment variables for Supabase or Resend');
-    return {
-      message: 'Server configuration error. Please check environment variables.',
-      errors: { _form: ['Application is not configured correctly.'] }
-    };
+  return {
+    message: "This form is no longer in use. Please proceed to the checkout page.",
+    errors: { _form: ["This form is deprecated."]}
   }
-
-  const validatedFields = FormSchema.safeParse({
-    name: formData.get('name'),
-    email: formData.get('email'),
-    plan: formData.get('plan'),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Please correct the errors below.',
-    };
-  }
-  
-  const { name, email, plan } = validatedFields.data;
-  const supabase = createServerClient();
-  const tempPassword = "asd@123";
-
-  // Determine group_id based on plan name
-  let groupId: number;
-  if (plan.toLowerCase().includes('agency') || plan.toLowerCase().includes('enterprise')) {
-    groupId = 2; // agency
-  } else {
-    groupId = 3; // individual
-  }
-
-
-  // 1. Attempt to create the user. Supabase will handle the check for existing emails.
-  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-    email: email,
-    password: tempPassword,
-    email_confirm: true, // Auto-confirm email for immediate login
-    user_metadata: {
-      name: name,
-      plan: plan,
-      password_is_temporary: true,
-      group_id: groupId
-    }
-  });
-
-  if (authError) {
-    console.error('Supabase user creation error:', authError);
-    // Check if the error is because the user already exists
-    if (authError.message.includes('already registered')) {
-      return {
-        message: 'This email address is already registered. Please try logging in.',
-        errors: { _form: ['Email already in use.'] }
-      };
-    }
-    return {
-      message: 'Could not create user. Please try again later.',
-      errors: { _form: [authError.message] }
-    };
-  }
-
-  if (!authData.user) {
-     return {
-      message: 'An unexpected error occurred during user creation.',
-      errors: { _form: ['User data not returned from Supabase.'] }
-    };
-  }
-
-  // 2. Send welcome email
-  try {
-    const resend = new Resend(resendApiKey);
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: email,
-      subject: `Welcome to precasprep - Your ${plan} Plan`,
-      react: WelcomeEmail({ name, email, plan, tempPassword }),
-    });
-  } catch (error: any) {
-    console.error('Email sending error:', error);
-    // If email fails, it's critical to let the user know, and we should delete the created user
-    // to allow them to try again cleanly.
-    await supabase.auth.admin.deleteUser(authData.user.id);
-    return {
-      message: `We couldn't send your welcome email. Please check your email address and try again.`,
-      errors: { _form: ['Email delivery failed. Please try signing up again.'] }
-    };
-  }
-
-  // 3. Redirect on success
-  redirect(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
 }
