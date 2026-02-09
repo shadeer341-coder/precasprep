@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useCallback } from 'react';
@@ -68,52 +69,59 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
 
   const handleOnApprove = useCallback(
     async (data: OnApproveData, actions: OnApproveActions) => {
+      // This function is now structured to capture payment first.
       if (!actions.order) {
-        const errorMessage = 'Could not capture the order. Please contact support.';
+        const errorMessage = 'Could not process the order. Please contact support.';
         setError(errorMessage);
         toast({ variant: 'destructive', title: 'Payment Error', description: errorMessage });
         return;
       }
 
       setIsProcessing(true);
+      setError(null);
 
-      // 1. Attempt to create the user BEFORE capturing payment
-      const userCreationResult = await processOrder({
-        name,
-        email,
-        plan: planName,
-        orderId: data.orderID,
-      });
-
-      // 2. If user creation fails, show error and STOP. Do not capture payment.
-      if (!userCreationResult.success) {
-        setError(userCreationResult.message);
-        toast({
-          variant: 'destructive',
-          title: 'Registration Failed',
-          description: userCreationResult.message,
-        });
-        setIsProcessing(false);
-        return;
-      }
-
-      // 3. If user creation is successful, THEN capture the payment.
       try {
+        // 1. Capture the payment immediately. This is fast and prevents timeouts.
         const order = await actions.order.capture();
-        console.log('PayPal Order Captured, user created successfully:', order);
+        console.log('PayPal Order Captured:', order);
         
-        toast({
-          title: 'Payment Successful!',
-          description: 'Your account has been created. Redirecting...',
+        // 2. Now that payment is secure, process the order (create user, send email).
+        const userCreationResult = await processOrder({
+          name,
+          email,
+          plan: planName,
+          orderId: data.orderID,
         });
-        router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+
+        // 3. Handle the result of order processing.
+        if (userCreationResult.success) {
+          toast({
+            title: 'Payment Successful!',
+            description: 'Your account has been created. Redirecting...',
+          });
+          router.push(`/thank-you?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+        } else {
+          // This is the critical failure case: payment succeeded, but account creation failed.
+          const errorMessage = `Your payment was successful, but we couldn't complete your registration. Please contact support with Order ID: ${data.orderID}. Reason: ${userCreationResult.message}`;
+          console.error('Post-payment account creation failed:', userCreationResult.message);
+          setError(errorMessage);
+          toast({
+            variant: 'destructive',
+            title: 'Account Registration Failed',
+            description: errorMessage,
+            duration: 30000, // Make toast more persistent
+          });
+          setIsProcessing(false);
+        }
+
       } catch (captureError) {
-        console.error('Error capturing order after user creation:', captureError);
-        const errorMessage = "Your payment was approved but we couldn't finalize it. Please contact support. Your account was created but payment failed.";
+        // This block now only handles failures in capturing the payment itself.
+        console.error('Error capturing PayPal order:', captureError);
+        const errorMessage = "Your payment could not be processed. Please try again or use a different payment method.";
         setError(errorMessage);
         toast({
           variant: 'destructive',
-          title: 'Payment Capture Error',
+          title: 'Payment Failed',
           description: errorMessage,
         });
         setIsProcessing(false);
@@ -127,13 +135,13 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
       console.error('PayPal onError callback triggered:', err);
       
       // This error often means the user closed the PayPal popup. We can safely ignore it.
-      if (err && err.message && err.message.includes('Window closed')) {
-        console.log('Payment window was closed by the user.');
+      if (err && err.message && (err.message.includes('Window closed') || err.message.includes('cross-domain error'))) {
+        console.log('Payment window was closed by the user or timed out.');
         setIsProcessing(false); // Make sure to stop spinner if user cancels
         return; 
       }
 
-      const errorMessage = 'An error occurred with the PayPal payment. Please try again or contact support.';
+      const errorMessage = 'An unexpected error occurred with PayPal. Please try again or contact support.';
       setError(errorMessage);
       toast({ variant: 'destructive', title: 'PayPal Payment Error', description: errorMessage });
       setIsProcessing(false);
@@ -144,14 +152,17 @@ const PayPalCheckoutButton = ({ planName, price, name, email, disabled }: PayPal
   return (
     <div className="w-full">
       {isProcessing ? (
-        <div className="flex items-center justify-center p-4 bg-muted rounded-md h-[76px]">
-          <Loader2 className="h-6 w-6 animate-spin mr-2" />
-          <span>Processing your order...</span>
+        <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-md h-[76px]">
+          <div className="flex items-center">
+            <Loader2 className="h-6 w-6 animate-spin mr-2" />
+            <span>Processing your order...</span>
+          </div>
+          <p className="text-sm text-muted-foreground mt-1">Please do not close this window.</p>
         </div>
       ) : (
         <>
           <PayPalButtons
-            key={planName + price + name + email} // Force re-render when details change
+            key={planName + price + name + email + disabled} // Force re-render when details change
             style={{ layout: 'vertical', label: 'pay' }}
             createOrder={handleCreateOrder}
             onApprove={handleOnApprove}
