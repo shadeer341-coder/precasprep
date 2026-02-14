@@ -83,6 +83,7 @@ function CheckoutForm() {
         name,
         email,
         plan: planName,
+        price: parseFloat(price),
         orderId: order.id,
       });
 
@@ -121,7 +122,7 @@ function CheckoutForm() {
       }
       setIsProcessing(false);
     }
-  }, [form, planName, router, toast]);
+  }, [form, planName, router, toast, price]);
   
   const handleOnClick = useCallback((data: OnClickData, actions: OnClickActions) => {
     if (!form.formState.isValid) {

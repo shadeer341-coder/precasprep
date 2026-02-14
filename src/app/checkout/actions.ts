@@ -10,6 +10,7 @@ const OrderSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   email: z.string().email('Please enter a valid email address.'),
   plan: z.string().min(1, 'Plan is required.'),
+  price: z.number().positive('Price must be a positive number.'),
   orderId: z.string().min(1, 'Order ID is missing'),
 });
 
@@ -30,7 +31,7 @@ export async function processOrder(
     };
   }
   
-  const { name, email, plan } = validatedFields.data;
+  const { name, email, plan, price } = validatedFields.data;
 
   const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -88,7 +89,37 @@ export async function processOrder(
     };
   }
 
-  // 2. Send welcome email
+  // 2. Insert into purchases table
+  let attempts: number | null;
+  if (plan.toLowerCase().includes('agency - starter')) {
+    attempts = 10;
+  } else if (plan.toLowerCase().includes('agency - standard')) {
+    attempts = 25;
+  } else if (plan.toLowerCase().includes('agency - advanced')) {
+    attempts = 50;
+  } else { // Individual plan
+    attempts = null; // Represents unlimited
+  }
+
+  const { error: purchaseError } = await supabase.from('purchases').insert({
+    user_id: authData.user.id,
+    amount_spent: price,
+    attempts: attempts,
+  });
+
+  if (purchaseError) {
+    console.error('Supabase purchase insertion error:', purchaseError);
+    // User was created but purchase record failed. The client-side will show a generic error
+    // telling the user to contact support with their Order ID.
+    // We are not deleting the user here because payment has already been captured.
+    return {
+      success: false,
+      message: 'Could not record purchase details.',
+    };
+  }
+
+
+  // 3. Send welcome email
   try {
     const resend = new Resend(resendApiKey);
     await resend.emails.send({
@@ -99,19 +130,18 @@ export async function processOrder(
     });
   } catch (error: any) {
     console.error('Email sending error:', error);
-    // If email fails, it's critical to let the user know, and we should delete the created user
-    // to allow them to try again cleanly.
-    await supabase.auth.admin.deleteUser(authData.user.id);
+    // If email fails, the user and purchase are already created.
+    // The client-side will show an error guiding them to support.
     return {
       success: false,
-      message: `We couldn't send your welcome email. Your order was not completed. Please check your email address and try again.`,
+      message: `We couldn't send your welcome email, but your account is created. Please contact support to get your login details.`,
     };
   }
 
-  // 3. On success, we don't redirect from the server action. 
+  // 4. On success, we don't redirect from the server action. 
   // We return a success status, and the client will handle the redirect.
   return {
     success: true,
-    message: 'User created successfully.'
+    message: 'User created and purchase recorded successfully.',
   };
 }
