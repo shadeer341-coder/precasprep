@@ -1,10 +1,16 @@
-
 "use client";
 
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
+import { useState, useEffect } from 'react';
 
 export default function PrivacyPolicyPage() {
+  const [lastUpdated, setLastUpdated] = useState('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+  }, []);
+
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <Header />
@@ -12,7 +18,7 @@ export default function PrivacyPolicyPage() {
         <div className="container max-w-4xl mx-auto px-4 md:px-6">
           <article className="prose dark:prose-invert max-w-none">
             <h1>Privacy Policy</h1>
-            <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <p className="text-muted-foreground">Last updated: {lastUpdated}</p>
 
             <p>Welcome to precasprep ("we," "our," "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.</p>
 

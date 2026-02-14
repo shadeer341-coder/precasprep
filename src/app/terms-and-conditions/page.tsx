@@ -1,10 +1,16 @@
-
 "use client";
 
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
+import { useState, useEffect } from 'react';
 
 export default function TermsAndConditionsPage() {
+  const [lastUpdated, setLastUpdated] = useState('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+  }, []);
+
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <Header />
@@ -12,7 +18,7 @@ export default function TermsAndConditionsPage() {
         <div className="container max-w-4xl mx-auto px-4 md:px-6">
           <article className="prose dark:prose-invert max-w-none">
             <h1>Terms and Conditions</h1>
-            <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <p className="text-muted-foreground">Last updated: {lastUpdated}</p>
 
             <p>Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the precasprep website (the "Service") operated by precasprep ("us", "we", or "our").</p>
             <p>Your access to and use of the Service is conditioned upon your acceptance of and compliance with these Terms. These Terms apply to all visitors, users, and others who wish to access or use the Service.</p>
