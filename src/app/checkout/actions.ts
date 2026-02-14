@@ -1,3 +1,4 @@
+
 'use server';
 
 import { z } from 'zod';
@@ -105,6 +106,8 @@ export async function processOrder(
     user_id: authData.user.id,
     amount_spent: price,
     attempts: attempts,
+    purpose: plan,
+    given_to: email,
   });
 
   if (purchaseError) {
