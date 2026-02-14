@@ -38,9 +38,9 @@ export const WelcomeEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/logo.png`}
-          width="120"
-          height="30"
+          src={`${baseUrl}/precasprep-logo.webp`}
+          width={120}
+          height={30}
           alt="precasprep"
           style={logo}
         />
