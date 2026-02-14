@@ -11,15 +11,15 @@ export function Footer() {
             <Image 
               src="/precasprep-logo.webp" 
               alt="precasprep logo" 
-              width={120} 
-              height={30} 
+              width={180} 
+              height={45} 
               className="block dark:hidden"
             />
             <Image 
               src="/precasprep-logo-dark.webp" 
               alt="precasprep logo" 
-              width={120} 
-              height={30} 
+              width={180} 
+              height={45} 
               className="hidden dark:block"
             />
           </Link>
