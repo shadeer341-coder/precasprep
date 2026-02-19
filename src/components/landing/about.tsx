@@ -134,8 +134,11 @@ export function About() {
             <p className="text-xl text-muted-foreground">Real Practice. Real Feedback. Real Success.</p>
           </div>
           <div>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground mb-4">
                 Practice with real questions, get expert feedback, improve yourself and pass your final CAS Shield interview.
+            </p>
+            <p className="text-muted-foreground">
+                Facing the Pre-CAS (credibility) interview can be stressful—many students fail because they don’t know the exact questions, how to answer them, or how the CAS Shield system works. This leads to missed intakes, lost opportunities, and unnecessary stress.
             </p>
           </div>
         </motion.div>
