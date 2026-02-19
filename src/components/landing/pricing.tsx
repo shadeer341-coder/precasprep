@@ -77,7 +77,7 @@ export function Pricing() {
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">Pricing Plans</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Find the Perfect Plan</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Start with our flexible plans. Simple and transparent pricing to help you succeed.
+              With our system, you’ll build the confidence and skills to pass your Pre-CAS interview on the first attempt—and move one step closer to your UK study dream.
             </p>
           </div>
         </motion.div>
