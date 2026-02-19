@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -86,7 +85,7 @@ export function Hero() {
               className="max-w-[600px] text-muted-foreground md:text-xl"
               variants={itemVariants}
             >
-              Get anonymous mock interviews with engineers from Google, Meta, and more.
+              Practice Smart. Pass Your University Interview with Confidence.
             </motion.p>
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 pt-4"
@@ -126,4 +125,3 @@ export function Hero() {
     </section>
   );
 }
-
