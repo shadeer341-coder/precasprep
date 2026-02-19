@@ -241,7 +241,7 @@ export function About() {
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                        <div className="flex-1">
-                        <CardTitle>Track Your Growth</CardTitle>
+                        <CardTitle>Receive 3 practice attempts, each with different sets of questions</CardTitle>
                         <p className="text-muted-foreground pt-2">Receive email reports after each attempt so you can see your progress and prepare with confidence.</p>
                       </div>
                       <Repeat className="h-8 w-8 text-primary" />
