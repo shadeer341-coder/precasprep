@@ -134,7 +134,7 @@ export function About() {
             <p className="text-xl text-muted-foreground">Real Practice. Real Feedback. Real Success.</p>
           </div>
           <div>
-            <p className="text-lg text-muted-foreground mb-4">
+            <p className="text-xl text-foreground mb-6">
                 Practice with real questions, get expert feedback, improve yourself and pass your final CAS Shield interview.
             </p>
             <p className="text-muted-foreground">
