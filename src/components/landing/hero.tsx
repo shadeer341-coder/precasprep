@@ -80,7 +80,7 @@ export function Hero() {
               className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-foreground"
               variants={itemVariants}
             >
-              Practice and ace interviews
+              Experience the real CAS Shield interview with exact questions
             </motion.h1>
             <motion.p 
               className="max-w-[600px] text-muted-foreground md:text-xl"
@@ -126,3 +126,4 @@ export function Hero() {
     </section>
   );
 }
+
