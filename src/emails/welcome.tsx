@@ -20,9 +20,7 @@ interface WelcomeEmailProps {
   tempPassword?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:9002';
+const baseUrl = 'https://precasprep.com';
 
 export const WelcomeEmail = ({
   name,
