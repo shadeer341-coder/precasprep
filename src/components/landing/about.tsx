@@ -37,7 +37,7 @@ const features = [
   },
   {
     icon: <Repeat className="h-8 w-8 text-primary" />,
-    title: "Track Your Growth",
+    title: "Receive 3 practice attempts, each with different sets of questions",
     description: "Receive email reports after each attempt so you can see your progress and prepare with confidence.",
     image: null,
   },
@@ -229,7 +229,6 @@ export function About() {
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                       <div className="flex-1">
                         <CardTitle>Practice in a system that works exactly like CAS Shield</CardTitle>
-                        <p className="text-muted-foreground pt-2">Our platform mimics the CAS Shield interface. (watch our sample video)</p>
                       </div>
                       <LayoutDashboard className="h-8 w-8 text-primary" />
                     </CardHeader>
@@ -242,7 +241,6 @@ export function About() {
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                        <div className="flex-1">
                         <CardTitle>Receive 3 practice attempts, each with different sets of questions</CardTitle>
-                        <p className="text-muted-foreground pt-2">Receive email reports after each attempt so you can see your progress and prepare with confidence.</p>
                       </div>
                       <Repeat className="h-8 w-8 text-primary" />
                     </CardHeader>
