@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '../theme-toggle';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const Logo = () => (
@@ -13,15 +13,15 @@ const Logo = () => (
     <Image 
       src="/precasprep-logo.webp" 
       alt="precasprep logo" 
-      width={180} 
-      height={45} 
+      width={270} 
+      height={67.5} 
       className="block dark:hidden"
     />
     <Image 
       src="/precasprep-logo-dark.webp" 
       alt="precasprep logo" 
-      width={180} 
-      height={45} 
+      width={270} 
+      height={67.5} 
       className="hidden dark:block"
     />
   </>
@@ -30,6 +30,9 @@ const Logo = () => (
 
 export function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -58,9 +61,9 @@ export function Header() {
 
         {/* Desktop Buttons */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
-          <ThemeToggle />
+          {mounted && <ThemeToggle />}
           <Button variant="ghost" asChild>
-            <Link href="/login">Log in</Link>
+            <Link href="https://app.precasprep.com">Log in</Link>
           </Button>
           <Button asChild className="font-bold">
             <Link href="/#pricing">Sign up</Link>
@@ -69,7 +72,7 @@ export function Header() {
         
         {/* Mobile Navigation */}
         <div className="flex flex-1 items-center justify-end md:hidden">
-          <ThemeToggle />
+          {mounted && <ThemeToggle />}
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -99,7 +102,7 @@ export function Header() {
                   </Link>
                   <div className="space-y-4 pt-4">
                     <Button variant="ghost" asChild className="w-full justify-start">
-                        <Link href="/login">Log in</Link>
+                        <Link href="https://app.precasprep.com">Log in</Link>
                     </Button>
                     <Button asChild className="font-bold w-full">
                         <Link href="/#pricing">Sign up</Link>

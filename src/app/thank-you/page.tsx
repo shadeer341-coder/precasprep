@@ -28,7 +28,7 @@ export default function ThankYouPage({ searchParams }: { searchParams: { name?: 
                             Please check your inbox (and spam folder) to complete your setup.
                         </p>
                         <Button asChild>
-                            <Link href="/login">Proceed to Login</Link>
+                            <Link href="https://app.precasprep.com">Proceed to Login</Link>
                         </Button>
                     </CardContent>
                 </Card>

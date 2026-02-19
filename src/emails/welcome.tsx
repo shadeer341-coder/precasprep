@@ -59,7 +59,7 @@ export const WelcomeEmail = ({
           We recommend changing your password after your first login for security.
         </Text>
         <Section style={btnContainer}>
-          <Button style={button} href={`${baseUrl}/login`}>
+          <Button style={button} href="https://app.precasprep.com">
             Login to Your Account
           </Button>
         </Section>

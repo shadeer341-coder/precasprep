@@ -96,7 +96,7 @@ export function Hero() {
                 <Link href="/#pricing">Sign up</Link>
               </Button>
               <Button size="lg" variant="secondary" asChild className="font-bold">
-                <Link href="/login">Book a session</Link>
+                <Link href="https://app.precasprep.com">Book a session</Link>
               </Button>
             </motion.div>
           </motion.div>
