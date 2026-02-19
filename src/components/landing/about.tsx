@@ -128,7 +128,7 @@ export function About() {
           className="grid md:grid-cols-2 gap-12 items-center"
           variants={itemVariants}
         >
-          <div>
+          <div className="space-y-4">
             <p className="text-xl text-foreground mb-6">
                 Practice with real questions, get expert feedback, improve yourself and pass your final CAS Shield interview.
             </p>
@@ -136,7 +136,7 @@ export function About() {
                 Facing the Pre-CAS (credibility) interview can be stressful—many students fail because they don’t know the exact questions, how to answer them, or how the CAS Shield system works. This leads to missed intakes, lost opportunities, and unnecessary stress.
             </p>
           </div>
-          <div className="space-y-4">
+          <div>
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">Why Choose Us?</div>
             <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Built to Help You Ace Your University Interview</h2>
             <p className="text-xl text-muted-foreground">Real Practice. Real Feedback. Real Success.</p>
@@ -228,10 +228,10 @@ export function About() {
                 <div className="relative bg-card rounded-lg h-full flex flex-col">
                     <CardHeader className="flex-row items-center gap-4 flex-1">
                       <div className="flex-1">
-                        <CardTitle>Expert Feedback</CardTitle>
-                        <p className="text-muted-foreground pt-2">Our team of experienced reviewers analyzes your responses to provide personalized, actionable feedback.</p>
+                        <CardTitle>Practice in a system that works exactly like CAS Shield</CardTitle>
+                        <p className="text-muted-foreground pt-2">Our platform mimics the CAS Shield interface. (watch our sample video)</p>
                       </div>
-                      <Users className="h-8 w-8 text-primary" />
+                      <LayoutDashboard className="h-8 w-8 text-primary" />
                     </CardHeader>
                 </div>
               </Card>
