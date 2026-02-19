@@ -124,18 +124,18 @@ export function About() {
       variants={containerVariants}
     >
       <div className="container px-4 md:px-6">
-        <motion.div 
-          className="flex flex-col items-center justify-center space-y-4 text-center"
+        <motion.div
+          className="grid md:grid-cols-2 gap-12 items-center"
           variants={itemVariants}
         >
-          <div className="space-y-2 text-center">
+          <div className="space-y-4">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">Why Choose Us?</div>
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Practice with real questions, get expert feedback, and track progress, all in one place.</h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Practice with real questions, get expert feedback, improve yourself and pass your final CAS Shield interview.
-            </p>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Facing the Pre-CAS (credibility) interview can be stressful—many students fail because they don’t know the exact questions, how to answer them, or how the CAS Shield system works. This leads to missed intakes, lost opportunities, and unnecessary stress.
+            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Built to Help You Ace Your University Interview</h2>
+            <p className="text-xl text-muted-foreground">Real Practice. Real Feedback. Real Success.</p>
+          </div>
+          <div>
+            <p className="text-lg text-muted-foreground">
+                Practice with real questions, get expert feedback, improve yourself and pass your final CAS Shield interview.
             </p>
           </div>
         </motion.div>
