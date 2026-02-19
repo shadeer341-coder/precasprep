@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,9 +130,9 @@ export function About() {
         >
           <div className="space-y-2 text-center">
             <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">Why Choose Us?</div>
-            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Built to Help You Ace Your University Interview</h2>
+            <h2 className="text-3xl font-headline font-bold tracking-tighter sm:text-5xl">Practice with real questions, get expert feedback, and track progress, all in one place.</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Practice with real questions, get expert feedback, and track progress, all in one place.
+              Practice with real questions, get expert feedback, improve yourself and pass your final CAS Shield interview.
             </p>
           </div>
         </motion.div>
