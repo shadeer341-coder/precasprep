@@ -39,8 +39,8 @@ export const WelcomeEmail = ({
       <Container style={container}>
         <Img
           src={`${baseUrl}/precasprep-logo.webp`}
-          width={180}
-          height={45}
+          width={270}
+          height={67.5}
           alt="precasprep"
           style={logo}
         />
@@ -72,7 +72,7 @@ export const WelcomeEmail = ({
         </Text>
         <Hr style={hr} />
         <Text style={footer}>
-          precasprep, 123 University Lane, Knowledge City, 45678
+          If you have any questions, please contact our support team at support@precasprep.com.
         </Text>
       </Container>
     </Body>

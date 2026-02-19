@@ -1,3 +1,4 @@
+
 'use server';
 
 import { z } from 'zod';
@@ -125,7 +126,7 @@ export async function processOrder(
   try {
     const resend = new Resend(resendApiKey);
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'Precasprep <noreply@precasprep.com>',
       to: email,
       subject: `Welcome to precasprep - Your ${plan} Plan`,
       react: WelcomeEmail({ name, email, plan, tempPassword }),
