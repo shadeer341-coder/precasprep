@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -262,11 +263,10 @@ export function About() {
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  <CardHeader className="flex-row items-start gap-4">
+                  <CardHeader className="flex-row items-center gap-4 flex-1">
                     <BarChart className="h-8 w-8 text-primary" />
                     <div className="flex-1">
-                      <CardTitle>Real-Time Analytics</CardTitle>
-                      <p className="text-muted-foreground pt-2">Drive decisions with powerful insights.</p>
+                      <CardTitle>Get detailed feedback within 4 hours after your mock interview</CardTitle>
                     </div>
                   </CardHeader>
               </div>
