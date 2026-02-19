@@ -22,8 +22,9 @@ const agencyStarterFeatures = [
 ];
 
 const agencyStandardFeatures = [
-  "All features in Starter",
+  "All features in Individual",
   "Up to 25 students",
+  "Team management dashboard",
   "Custom branding",
 ];
 
