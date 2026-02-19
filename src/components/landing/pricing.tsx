@@ -9,9 +9,9 @@ import { motion } from 'framer-motion';
 import Link from "next/link";
 
 const individualFeatures = [
-  "Unlimited practice sessions",
+  "3 practice sessions",
   "Personalized expert feedback",
-  "50+ interview questions",
+  "Experience 40+ interview questions",
   "Performance tracking",
 ];
 
