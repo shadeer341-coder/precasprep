@@ -36,10 +36,10 @@ export const WelcomeEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/precasprep-logo.webp`}
+          src={`${baseUrl}/precasprep-logo-w.webp`}
           width={270}
           height={67.5}
-          alt="precasprep"
+          alt="precasprep logo"
           style={logo}
         />
         <Text style={paragraph}>Hi {name},</Text>
