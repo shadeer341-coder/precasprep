@@ -16,7 +16,7 @@ import { motion } from 'framer-motion';
 const features = [
   {
     icon: <NotebookText className="h-8 w-8 text-primary" />,
-    title: "Real Interview Questions",
+    title: "Access a full bank of actual Pre-CAS questions",
     description: "Practice with authentic university-style questions, carefully designed to reflect what you’ll face in real interviews.",
     image: "https://ovktxfetpzfduhecbjek.supabase.co/storage/v1/object/public/public-main-index/real-time-analytics-01.jpg",
     aiHint: "dashboard analytics",
@@ -163,7 +163,7 @@ export function About() {
                 <CardHeader className="flex-row items-start gap-4">
                   <NotebookText className="h-8 w-8 text-primary" />
                   <div className="flex-1">
-                    <CardTitle>Real Interview Questions</CardTitle>
+                    <CardTitle>Access a full bank of actual Pre-CAS questions</CardTitle>
                     <p className="text-muted-foreground pt-2">Practice with authentic university-style questions, carefully designed to reflect what you’ll face in real interviews.</p>
                   </div>
                 </CardHeader>
