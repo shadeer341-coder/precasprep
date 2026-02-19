@@ -1,4 +1,3 @@
-
 'use server';
 
 import { z } from 'zod';
@@ -45,7 +44,7 @@ export async function processOrder(
   }
 
   const supabase = createServerClient();
-  const tempPassword = "asd@123";
+  const tempPassword = Math.random().toString(36).substring(2, 12);
 
   // Determine group_id based on plan name
   let groupId: number;
