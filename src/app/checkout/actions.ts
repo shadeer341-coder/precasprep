@@ -1,9 +1,10 @@
+
 'use server';
 
 import { z } from 'zod';
 import { Resend } from 'resend';
 import { WelcomeEmail } from '@/emails/welcome';
-import { createServerClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 
 const OrderSchema = z.object({
@@ -43,9 +44,12 @@ export async function processOrder(
     };
   }
 
-  const supabase = createServerClient();
-  const tempPassword = Math.random().toString(36).substring(2, 12);
-
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+  
   // Determine group_id based on plan name
   let groupId: number;
   if (plan.toLowerCase().includes('agency') || plan.toLowerCase().includes('enterprise')) {
