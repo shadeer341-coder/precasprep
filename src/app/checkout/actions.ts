@@ -58,6 +58,9 @@ export async function processOrder(
     groupId = 3; // individual
   }
 
+  // Generate a temporary password
+  const tempPassword = Math.random().toString(36).slice(2, 10);
+
   // 1. Attempt to create the user. Supabase will handle the check for existing emails.
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: email,
