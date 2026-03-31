@@ -11,33 +11,33 @@ import { motion } from 'framer-motion';
 const testimonials = [
   {
     quote: "Precasprep was a game-changer. The expert feedback helped me pinpoint exactly where I was going wrong. I got into my dream university!",
-    name: "Sarah L.",
-    title: "Student, Stanford University",
-    avatar: "SL",
+    name: "Tarun Basak",
+    title: "Student, University of East London",
+    avatar: "TB",
     image: "https://picsum.photos/100/100?random=1",
     ai_hint: "woman portrait",
     rating: 5,
   },
   {
-    quote: "As a college counselor, I recommend this to all my students. The platform is intuitive and the feedback is incredibly valuable.",
-    name: "Michael Chen",
-    title: "College Counselor",
-    avatar: "MC",
+    quote: "As a student counselor, I recommend this to all my students. The platform is intuitive and the feedback is incredibly valuable.",
+    name: "Arun Ramanathan",
+    title: "Student Visa Counselor",
+    avatar: "AR",
     image: "https://picsum.photos/100/100?random=2",
     ai_hint: "man portrait",
     rating: 5,
   },
   {
-    quote: "The camera validation feature is brilliant. It helped me get comfortable with the virtual format and improve my on-screen presence.",
-    name: "Jessica P.",
-    title: "Student, MIT",
-    avatar: "JP",
+    quote: "I failed the Coventry university interview first attempt, after that only I found out about precasprep, I practiced with it and finally I passed the university interview in the second attempt. Highly recommend!",
+    name: "Ronali Amatya",
+    title: "Student, Coventry University",
+    avatar: "RA",
     image: "https://picsum.photos/100/100?random=3",
     ai_hint: "woman portrait",
     rating: 4,
   },
   {
-    quote: "Our agency uses Precasprep to prepare our clients. The results speak for themselves - higher acceptance rates across the board.",
+    quote: "Our agency uses Precasprep to prepare our students. higher interview success rates across our region.",
     name: "David R.",
     title: "Director, Apex Admissions",
     avatar: "DR",
@@ -47,17 +47,17 @@ const testimonials = [
   },
   {
     quote: "The detailed feedback is what makes this tool so powerful. I could practice a question and immediately see how to improve.",
-    name: "Emily White",
-    title: "Student, Yale University",
-    avatar: "EW",
+    name: "Parameswaran Kasturi",
+    title: "Student, Birmingham City University",
+    avatar: "PK",
     image: "https://picsum.photos/100/100?random=5",
-    ai_hint: "woman portrait",
+    ai_hint: "man portrait",
     rating: 5,
   },
   {
     quote: "An essential tool for any student serious about their university applications. The question bank is extensive and very relevant.",
-    name: "James Brown",
-    title: "High School Principal",
+    name: "Pathum Siriwardana",
+    title: "University of Law",
     avatar: "JB",
     image: "https://picsum.photos/100/100?random=6",
     ai_hint: "man portrait",
@@ -117,8 +117,8 @@ export function Testimonials() {
   const secondRow = testimonials.slice(testimonials.length / 2);
 
   return (
-    <motion.section 
-      id="testimonials" 
+    <motion.section
+      id="testimonials"
       className="w-full py-12 md:py-24 lg:py-32"
       initial="hidden"
       whileInView="visible"
@@ -126,7 +126,7 @@ export function Testimonials() {
       variants={containerVariants}
     >
       <div className="container px-4 md:px-6">
-        <motion.div 
+        <motion.div
           className="flex flex-col items-center justify-center space-y-4 text-center"
           variants={itemVariants}
         >
@@ -138,7 +138,7 @@ export function Testimonials() {
             </p>
           </div>
         </motion.div>
-        <motion.div 
+        <motion.div
           className="relative mt-12 overflow-hidden"
           variants={itemVariants}
         >
